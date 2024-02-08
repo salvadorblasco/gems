@@ -42,7 +42,6 @@ class FittingParams():
         self.constraints[microstate] = self.parameters.pop(microstate)
 
     def create_restraint(self, umsnames):
-        breakpoint()
         aux = [self.parameters[self.msnames[i]] for i in umsnames]
         ids = [self.revid[self.msnames[i]] for i in umsnames]
         values = [v/aux[0] for v in aux]
@@ -86,7 +85,7 @@ class FittingParams():
             # for n, r in enumerate(self.restraints):
             #     if i in r:
             #         break
-            n, _, _ = self.__locate_restraint(c)
+            n, _, _ = self.__locate_restraint(c[0])
             return f"restrained[{n}]"
         else:
             return "refined"
@@ -121,7 +120,8 @@ class FittingParams():
             raise ValueError(f'microstate {microstate} non-existent')
 
     def __locate_restraint(self, microstate):
-        i = self.revid[microstate]
+        ums = self.mapping[microstate]
+        i = self.revid[ums]
         for n, r in enumerate(self.restraints):
             if i in r:
                 j = r.index(i)

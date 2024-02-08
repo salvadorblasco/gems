@@ -58,8 +58,9 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
 
     print('Starting...')
 
-    # method = 'BFGS'
-    method='Nelder-Mead'
+    # method = 'L-BFGS-B'
+    method = 'BFGS'
+    # method='Nelder-Mead'
     fobj = fobj_preparation(parameters, order, proton_activity, yvalues, weights, calc_residuals)
     chisq0 = fobj(ini_vals)
     print(f'initial chi squared: {chisq0}')
@@ -76,7 +77,14 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
     return infodict
 
 
-def fobj_preparation(parameters, order, proton_activity, yvalues, weights, fresiduals):
+def fobj_preparation(parameters,
+                     order: int, 
+                     proton_activity: np.ndarray,
+                     yvalues: np.ndarray,
+                     weights: np.ndarray,
+                     fresiduals: callable):
+    """Generate the objective function.
+    """
     def fobj(values):
         # print(values)
         parameters.set_values(values)
@@ -101,152 +109,155 @@ def _apply_keywords(args, parameters):
             case 'matrix':
                 pass
             case other:
-                raise ValueError
+                raise ValueError(f"Invalid keyword: {other}")
 
 
 def _calc_free_energy(parameters):
-    return {ms: parameters.free_energy(ms) for ms in gems.libuk.generate_all_microstates(parameters.size)}
+    microstates = gems.libuk.generate_all_microstates(parameters.size)
+    return {ms: parameters.free_energy(ms) for ms in microstates}
 
 
 def _calc_free_energy_error(parameters):
-    return {ms: parameters.error_free_energy(ms) for ms in gems.libuk.generate_all_microstates(parameters.size)}
+    microstates = gems.libuk.generate_all_microstates(parameters.size)
+    return {ms: parameters.error_free_energy(ms) for ms in microstates}
 
 
-def arrange_parameters(expmolec, initvals, order=3):
-    """Build the initial parameter array from initial guess.
+# def arrange_parameters(expmolec, initvals, order=3):
+#     """Build the initial parameter array from initial guess.
+# 
+#     Construct an initial array filled with zeros and then insert
+#     the given parameters in its proper places, leaving the not given
+#     parameters as zeros. Additional initial values given are ignored.
+# 
+#     Parameters:
+#         expmolec (str): a string defining the expanded symmetry of the
+#             molecule.
+#         initvals (iterable): list of initial values
+#         order (int): the order of interactions (1, 2 or 3)
+#     Returns:
+#         :class:`numpy.ndarray`: A 1D array with the parameters arranged in
+#             the proper order.
+#     Raises:
+#         ValueError: if the order parameter is not within 1--3.
+# 
+#     """
+#     if not 0 < order <= 3:
+#         raise ValueError
+#     n_params_1 = len(set(expmolec))
+#     n_params_2 = len(gems.libuk.order_terms(expmolec, 2))
+#     n_params_3 = len(gems.libuk.order_terms(expmolec, 3))
+#     n = (n_params_1, n_params_2, n_params_3)
+#     total_params = sum(n[:order])
+# 
+#     parameters = np.zeros(total_params)
+#     for i in range(min(len(parameters), len(initvals))):
+#         parameters[i] = initvals[i]
+#     return parameters
 
-    Construct an initial array filled with zeros and then insert
-    the given parameters in its proper places, leaving the not given
-    parameters as zeros. Additional initial values given are ignored.
 
-    Parameters:
-        expmolec (str): a string defining the expanded symmetry of the
-            molecule.
-        initvals (iterable): list of initial values
-        order (int): the order of interactions (1, 2 or 3)
-    Returns:
-        :class:`numpy.ndarray`: A 1D array with the parameters arranged in
-            the proper order.
-    Raises:
-        ValueError: if the order parameter is not within 1--3.
-
-    """
-    if not 0 < order <= 3:
-        raise ValueError
-    n_params_1 = len(set(expmolec))
-    n_params_2 = len(gems.libuk.order_terms(expmolec, 2))
-    n_params_3 = len(gems.libuk.order_terms(expmolec, 3))
-    n = (n_params_1, n_params_2, n_params_3)
-    total_params = sum(n[:order])
-
-    parameters = np.zeros(total_params)
-    for i in range(min(len(parameters), len(initvals))):
-        parameters[i] = initvals[i]
-    return parameters
-
-
-def rearrange_parameters(param, param_errors, molecule, order):
-    """Rearrange a flattened array of parameters into order-sorted arrays.
-
-    Parameters:
-        param (iterable): a 1D array containing ordered parameters
-        param_errors (iterable): a 1D array containing ordered parameter errors
-        molecule (str): A string representing the molecule symmetry
-        order (int): A number indicating the interaction order level (1..3)
-
-    Returns:
-        tuple: fit_params1, err_params1, fit_params2, err_params2,
-            fit_params3, err_params3
-
-    """
-    n_params_1 = len(set(molecule))
-    n_params_2 = len(gems.libuk.order_terms(molecule, 2))
-    _lim = n_params_1 + n_params_2
-    fit_params1 = param[:n_params_1]
-    err_params1 = param_errors[:n_params_1]
-
-    fit_params2, err_params2, fit_params3, err_params3 = 4*(None,)
-
-    if order >= 2:
-        fit_params2 = param[n_params_1:_lim]
-        err_params2 = param_errors[n_params_1:_lim]
-
-    if order == 3:
-        fit_params3 = param[_lim:]
-        err_params3 = param_errors[_lim:]
-
-    return fit_params1, err_params1, fit_params2, err_params2, fit_params3, \
-        err_params3
+# def rearrange_parameters(param, param_errors, molecule, order):
+#     """Rearrange a flattened array of parameters into order-sorted arrays.
+# 
+#     Parameters:
+#         param (iterable): a 1D array containing ordered parameters
+#         param_errors (iterable): a 1D array containing ordered parameter errors
+#         molecule (str): A string representing the molecule symmetry
+#         order (int): A number indicating the interaction order level (1..3)
+# 
+#     Returns:
+#         tuple: fit_params1, err_params1, fit_params2, err_params2,
+#             fit_params3, err_params3
+# 
+#     """
+#     n_params_1 = len(set(molecule))
+#     n_params_2 = len(gems.libuk.order_terms(molecule, 2))
+#     _lim = n_params_1 + n_params_2
+#     fit_params1 = param[:n_params_1]
+#     err_params1 = param_errors[:n_params_1]
+# 
+#     fit_params2, err_params2, fit_params3, err_params3 = 4*(None,)
+# 
+#     if order >= 2:
+#         fit_params2 = param[n_params_1:_lim]
+#         err_params2 = param_errors[n_params_1:_lim]
+# 
+#     if order == 3:
+#         fit_params3 = param[_lim:]
+#         err_params3 = param_errors[_lim:]
+# 
+#     return fit_params1, err_params1, fit_params2, err_params2, fit_params3, \
+#         err_params3
 
 
 # DEPRECATED
-def do_fit(init_vars, order, expmolec, ah, shifts, weights=1.0):
-    """Fit data.
+# def do_fit(init_vars, order, expmolec, ah, shifts, weights=1.0):
+#     """Fit data.
+# 
+#     Calls :func:`scipy.optimization.minimize` in order to minimize
+#     :func:`fobj`.
+# 
+#     Parameters:
+#         init_vars (:class:`numpy.ndarray`):
+#         order (int):
+# 
+#     .. versionchanged:: 0.5
+#         Added option *weights*
+# 
+#     """
+#     method = 'BFGS'
+#     # method='Nelder-Mead'
+#     chisq0 = fobj(init_vars, order, expmolec, ah, shifts, weights)
+#     res = scipy.optimize.minimize(fobj, init_vars, method=method,
+#                                   args=(order, expmolec, ah, shifts, weights))
+#     return chisq0, res
 
-    Calls :func:`scipy.optimization.minimize` in order to minimize
-    :func:`fobj`.
 
-    Parameters:
-        init_vars (:class:`numpy.ndarray`):
-        order (int):
-
-    .. versionchanged:: 0.5
-        Added option *weights*
-
-    """
-    method = 'BFGS'
-    # method='Nelder-Mead'
-    chisq0 = fobj(init_vars, order, expmolec, ah, shifts, weights)
-    res = scipy.optimize.minimize(fobj, init_vars, method=method,
-                                  args=(order, expmolec, ah, shifts, weights))
-    return chisq0, res
-
-
-def build_terms(molecule, args=None):
-    """Construct epsilon and lambda matrices from parameters.
-
-    Parameters:
-        molecule (str): a string defining the summetry of the molecule.
-        args (sequence): a sequence containing the parameters
-
-    Returns:
-        tuple: the first element is a 2D array containing the binary terms;
-            the second is a 3D array containing the tertiary terms.
-
-    """
-    if args is None or len(args) == 0:
-        return None, None
-
-    def two_equal(seq):
-        count = collections.Counter(seq)
-        return any(i > 1 for i in count.values())
-
-    neps = len(molecule)
-
-    array2 = np.zeros((neps, neps))
-    terms2 = gems.libuk.order_terms(molecule, 2)
-    params2 = args[:len(terms2)]
-    dump = [(2, array2, terms2, params2)]
-
-    array3 = None
-    if len(args) > len(terms2):
-        array3 = np.zeros((neps, neps, neps))
-        terms3 = gems.libuk.order_terms(molecule, 3)
-        params3 = args[len(terms2):]
-        dump.append((3, array3, terms3, params3))
-
-    for n, array, terms, params in dump:
-        it = np.nditer(array, op_flags=['writeonly'], flags=['multi_index'])
-        while not it.finished:
-            txt = "".join(sorted(molecule[_] for _ in it.multi_index))
-            if two_equal(it.multi_index):
-                it.iternext()
-                continue
-            term = terms.index(txt)
-            it[0] = params[term]
-            it.iternext()
-
-    return array2, array3
+# DEPRECATED
+# def build_terms(molecule, args=None):
+#     """Construct epsilon and lambda matrices from parameters.
+# 
+#     Parameters:
+#         molecule (str): a string defining the summetry of the molecule.
+#         args (sequence): a sequence containing the parameters
+# 
+#     Returns:
+#         tuple: the first element is a 2D array containing the binary terms;
+#             the second is a 3D array containing the tertiary terms.
+# 
+#     """
+#     if args is None or len(args) == 0:
+#         return None, None
+# 
+#     def two_equal(seq):
+#         count = collections.Counter(seq)
+#         return any(i > 1 for i in count.values())
+# 
+#     neps = len(molecule)
+# 
+#     array2 = np.zeros((neps, neps))
+#     terms2 = gems.libuk.order_terms(molecule, 2)
+#     params2 = args[:len(terms2)]
+#     dump = [(2, array2, terms2, params2)]
+# 
+#     array3 = None
+#     if len(args) > len(terms2):
+#         array3 = np.zeros((neps, neps, neps))
+#         terms3 = gems.libuk.order_terms(molecule, 3)
+#         params3 = args[len(terms2):]
+#         dump.append((3, array3, terms3, params3))
+# 
+#     for n, array, terms, params in dump:
+#         it = np.nditer(array, op_flags=['writeonly'], flags=['multi_index'])
+#         while not it.finished:
+#             txt = "".join(sorted(molecule[_] for _ in it.multi_index))
+#             if two_equal(it.multi_index):
+#                 it.iternext()
+#                 continue
+#             term = terms.index(txt)
+#             it[0] = params[term]
+#             it.iternext()
+# 
+#     return array2, array3
 
 
 def first_term(molecule, terms):
@@ -333,22 +344,22 @@ def calc_residuals(free_energy, shifts, proton_activity):
 # DEPRECATED. USe gems.libuk.matrix_b
 # def fit_shifts(macro_prob, shifts):
 #     r"""Return calculated chemical shifts.
-# 
+#
 #     The calculated chemical shifts are computed according to the equation
 #     below. The parameter *shifts* can be a :class:`numpy.ma.ndarray`; in this
 #     case, the missing values are zeroed.
-# 
+#
 #     .. math::
 #         \delta^{\rm calc} = P^{+}_n(a_{\mathrm{H}}) \cdot
 #         \delta^{\rm exp} \cdot P_n(a_{\mathrm{H}})
-# 
+#
 #     Parameters:
 #         macro_prob (:class:`numpy.ndarray`): The  macrostate probability.
 #         shifts (:class:`numpy.ndarray`): The experimental chemical shifts.
-# 
+#
 #     Return:
 #         :class:`numpy.ndarray`: the calculated chemical shifts.
-# 
+#
 #     """
 #     improb = np.linalg.pinv(macro_prob)
 #     if np.ma.is_masked(shifts):
@@ -535,7 +546,7 @@ def postfit(retval, smooth_points=100):
 
 def _aux_postfit1(retval):
     result = retval['result']
-    order = retval['order']
+    # order = retval['order']
     x = result['x']
     total_params = len(x)
 
@@ -568,7 +579,7 @@ def _aux_postfit1(retval):
 
 def _aux_postfit2(retval):
     parms = retval['parameters']
-    mapping = retval['mapping']
+    # mapping = retval['mapping']
 
     # term1 = gems.fit.first_term(molecule, fit_params1)
     # term2, term3 = gems.fit.build_terms(molecule, x[n_microcts:])
