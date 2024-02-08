@@ -1,0 +1,14 @@
+usage: gems.py [-h] [-s MOLECULE] [-f FILE] [-p] [-o ORDER] [-w FILE]
+
+GEMS: The GEneral Microspeciation Solver v0.5
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s MOLECULE, --symmetry MOLECULE
+                        display information on the molecule
+  -f FILE, --fit FILE   load data in file and start computation
+  -p, --plot            display window with plots
+  -o ORDER, --order ORDER
+                        order of interactions to fit
+  -w FILE, --write FILE
+                        write results in numpy array for later use

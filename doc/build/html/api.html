@@ -1,0 +1,1751 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Public GEMS API &#8212; gems 0.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GEMS Changelog" href="changelog.html" />
+    <link rel="prev" title="Algorithm Details" href="algorithm.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="public-gems-api">
+<h1>Public GEMS API<a class="headerlink" href="#public-gems-api" title="Permalink to this headline">¶</a></h1>
+<p>The module <code class="xref py py-mod docutils literal notranslate"><span class="pre">gems</span></code> is organised in several submodules.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference internal" href="#module-gems.libio" title="gems.libio"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libio</span></code></a> contains input/output routines. You want to start with this one</dt><dd><p>in order to load the data and pass it to the fitting routines.</p>
+</dd>
+</dl>
+</li>
+<li><p><a class="reference internal" href="#module-gems.fit" title="gems.fit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.fit</span></code></a> contains the optimisation routines for fitting the data.</p></li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#module-gems.libuk" title="gems.libuk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libuk</span></code></a> contains all the tools you need to handle the microspeciation</dt><dd><p>information.</p>
+</dd>
+</dl>
+</li>
+<li><p><a class="reference internal" href="#module-gems.plotter" title="gems.plotter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.plotter</span></code></a> contains routines for plotting the results obtained</p></li>
+<li><p><a class="reference internal" href="#module-gems.report" title="gems.report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.report</span></code></a> contains reporting routines</p></li>
+</ul>
+<section id="variable-definition">
+<h2>variable definition<a class="headerlink" href="#variable-definition" title="Permalink to this headline">¶</a></h2>
+<section id="free-energy">
+<span id="def-free-energy"></span><h3>Free Energy<a class="headerlink" href="#free-energy" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> where the keys are the microstate codified as a tuple of ones and zeros
+and the value is a float representing the value of the energy that correspond to
+that microstate.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">free_energy</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mf">12.41</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">-</span><span class="mf">13.01</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mf">22.14</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">-</span><span class="mf">10.43</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mf">29.13</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">-</span><span class="mf">27.34</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mf">41.42</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="microstate">
+<span id="microstate-definition"></span><h3>Microstate<a class="headerlink" href="#microstate" title="Permalink to this headline">¶</a></h3>
+<p>The microstate can be codified either with numbers or letters. A tuple of zeros and
+ones of the lenght of the number of protonation centres can define each one of the
+microstates. When the centre s:sub:<cite>j</cite> is protonated, a 1 occupies that place in the
+tuple, zero otherwise. A given microstate is generally noted as {<em>s</em><sub>j</sub>} which
+means the collection of 0s and 1s that represent it, e.g. {0, 1, 0, 1} meaning that
+<em>s</em><sub>1</sub> = 0, <em>s</em><sub>2</sub> = 1, <em>s</em><sub>3</sub> = 0, <em>s</em><sub>4</sub> = 1.</p>
+</section>
+<section id="microstate-probability">
+<span id="def-microstate-probability"></span><h3>Microstate Probability<a class="headerlink" href="#microstate-probability" title="Permalink to this headline">¶</a></h3>
+<p>Each microstate has a probability that can be calculated from the free energy.</p>
+<div class="math notranslate nohighlight">
+\[p(\{s_j\}) = \frac{a_{\mathrm{H}}^n e^{-\beta F(\{s_j\})}}{\sum_{\{s_j\}} a_{\mathrm{H}}^n e^{-\beta F(\{s_j\})}}\]</div>
+<p>Internally, this variable is stored as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> where the key is a
+microstate binary tuple and the value is an iterable (like a 1D array) containing
+the values of the microstate probability for each titration point.</p>
+</section>
+<section id="macrostate-probability">
+<span id="def-macrostate-probability"></span><h3>Macrostate Probability<a class="headerlink" href="#macrostate-probability" title="Permalink to this headline">¶</a></h3>
+<p>Each macrostate has a probability that can be calculated according to</p>
+<div class="math notranslate nohighlight">
+\[P_n(a_H) = \frac{\bar{K_n} a_{\rm H}^n}{\sum_{n=0}^N \bar{K_n} a_{\mathrm{H}}^n}\]</div>
+</section>
+<section id="conditional-probability">
+<span id="def-conditional-probability"></span><h3>Conditional Probability<a class="headerlink" href="#conditional-probability" title="Permalink to this headline">¶</a></h3>
+<div class="math notranslate nohighlight">
+\[\pi_n(\{s_j\}) = \frac{e^{-\beta F(\{s_j\})}}{\sum_{\{s_j\}} e^{-\beta F(\{s_j\})}}\]</div>
+<div class="math notranslate nohighlight">
+\[\pi_n(\{s_j\}) = \pi_n({s_j}) P_n(a_H)\]</div>
+</section>
+<section id="molecule-symmetry">
+<span id="def-molecule-symmetry"></span><h3>Molecule Symmetry<a class="headerlink" href="#molecule-symmetry" title="Permalink to this headline">¶</a></h3>
+<p>The symmetry of a molecule can be expressed as a string of letters with a multiplier for
+the sites that are equivalent. For example <code class="samp docutils literal notranslate"><span class="pre">A2B</span></code> if the molecule has three
+centres, two of which are equivalent; or <code class="samp docutils literal notranslate"><span class="pre">ABC</span></code> if the molecule has three
+different centres.</p>
+</section>
+<section id="a-matrix">
+<span id="def-a-matrix"></span><h3>A Matrix<a class="headerlink" href="#a-matrix" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>A</strong> matrix represents the variation in population (rows) when the</p>
+</section>
+<section id="b-matrix">
+<span id="def-b-matrix"></span><h3>B Matrix<a class="headerlink" href="#b-matrix" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>B</strong> matrix represents the variation of the chemical shift (rows) when the
+macroscopic protonation degree changes in one unit.</p>
+<div class="math notranslate nohighlight">
+\[\delta_l - \delta^{(0)}_l = \sum_{n=1}^N B_{ln} P_n(a_H)\]</div>
+</section>
+<section id="delta-matrix">
+<span id="def-delta-matrix"></span><h3>Delta Matrix<a class="headerlink" href="#delta-matrix" title="Permalink to this headline">¶</a></h3>
+<p>The matrix Δ represents the variation of the chemical shift (rows) when the
+protonation degree of a particular site (columns) goes from protonated to
+unprotonated.</p>
+<div class="math notranslate nohighlight">
+\[\delta_l - \delta^{(0)}_l = \sum_{m=1} \Delta_{lm} \theta_m\]</div>
+</section>
+</section>
+<section id="module-gems.libuk">
+<span id="libuk-py"></span><h2>libuk.py<a class="headerlink" href="#module-gems.libuk" title="Permalink to this headline">¶</a></h2>
+<p>This module contains the basic tools for microconstants. These functions
+are loaded by <strong class="program">GEMS</strong> or they can be used in a standalone
+python script.</p>
+<section id="microstates-nomenclature">
+<h3>Microstates Nomenclature<a class="headerlink" href="#microstates-nomenclature" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">name_microstate()</span></code></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.name_terms" title="gems.libuk.name_terms"><code class="xref py py-func docutils literal notranslate"><span class="pre">name_terms()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.expand_name" title="gems.libuk.expand_name"><code class="xref py py-func docutils literal notranslate"><span class="pre">expand_name()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.compact_name" title="gems.libuk.compact_name"><code class="xref py py-func docutils literal notranslate"><span class="pre">compact_name()</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">molecule_info()</span></code></p></li>
+</ul>
+</section>
+<section id="functions-for-multiplicity-and-combinatory">
+<h3>Functions for Multiplicity and Combinatory<a class="headerlink" href="#functions-for-multiplicity-and-combinatory" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">order_terms()</span></code></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.kdeflation" title="gems.libuk.kdeflation"><code class="xref py py-func docutils literal notranslate"><span class="pre">kdeflation()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.comb" title="gems.libuk.comb"><code class="xref py py-func docutils literal notranslate"><span class="pre">comb()</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">remainder()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_microstep()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">state_microsteps()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">total_microconsts()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">total_microstates()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_microstate()</span></code></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.generate_all_microstates" title="gems.libuk.generate_all_microstates"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_all_microstates()</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">count_microstate()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_equivalent_states()</span></code></p></li>
+</ul>
+</section>
+<section id="terms-calculations">
+<h3>Terms calculations<a class="headerlink" href="#terms-calculations" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_free_energy()</span></code></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.microstate_probability" title="gems.libuk.microstate_probability"><code class="xref py py-func docutils literal notranslate"><span class="pre">microstate_probability()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.macrostate_probability" title="gems.libuk.macrostate_probability"><code class="xref py py-func docutils literal notranslate"><span class="pre">macrostate_probability()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.matrix_a" title="gems.libuk.matrix_a"><code class="xref py py-func docutils literal notranslate"><span class="pre">matrix_a()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.matrix_b" title="gems.libuk.matrix_b"><code class="xref py py-func docutils literal notranslate"><span class="pre">matrix_b()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.conditional_probability2" title="gems.libuk.conditional_probability2"><code class="xref py py-func docutils literal notranslate"><span class="pre">conditional_probability2()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.conditional_probability1" title="gems.libuk.conditional_probability1"><code class="xref py py-func docutils literal notranslate"><span class="pre">conditional_probability1()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.avg_prtdeg" title="gems.libuk.avg_prtdeg"><code class="xref py py-func docutils literal notranslate"><span class="pre">avg_prtdeg()</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">microstate_multiplicity()</span></code></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">micro_constants2()</span></code></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.micro_constants" title="gems.libuk.micro_constants"><code class="xref py py-func docutils literal notranslate"><span class="pre">micro_constants()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.error_macro_constants" title="gems.libuk.error_macro_constants"><code class="xref py py-func docutils literal notranslate"><span class="pre">error_macro_constants()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.macro_constants" title="gems.libuk.macro_constants"><code class="xref py py-func docutils literal notranslate"><span class="pre">macro_constants()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.libuk.num_prot_centres" title="gems.libuk.num_prot_centres"><code class="xref py py-func docutils literal notranslate"><span class="pre">num_prot_centres()</span></code></a></p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.avg_prtdeg">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">avg_prtdeg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msprob</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.avg_prtdeg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the average protonation degree.</p>
+<p>This routine uses eq (6) from Borkovec et al. <a class="reference internal" href="algorithm.html#borkovec2000" id="id1"><span>[Borkovec2000]</span></a></p>
+<div class="math notranslate nohighlight">
+\[\theta_m = \frac1N \sum_{\{s_j\}} s_m p(\{s_j\})\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msprob</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – the <a class="reference internal" href="#def-microstate-probability"><span class="std std-ref">microstate probability</span></a>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>average protonation degree of each centre.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.comb">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">comb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.comb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combinatorial for n elements  and k.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the number of elements</p></li>
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the k combination, where <span class="math notranslate nohighlight">\(n &gt;= k\)</span></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the combinatorial of n and k</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.compact_name">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">compact_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.compact_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compact a name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – an expanded molecule name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the compact name with multipliers</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">compact_name</span><span class="p">(</span><span class="s1">&#39;AAABCC&#39;</span><span class="p">)</span>
+<span class="go">A3BC2</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#gems.libuk.expand_name" title="gems.libuk.expand_name"><code class="xref py py-func docutils literal notranslate"><span class="pre">expand_name()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.compute_connectivity">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">compute_connectivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.compute_connectivity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.compute_isomorphisms">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">compute_isomorphisms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectivity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.compute_isomorphisms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.compute_mapping">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">compute_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isomorphisms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.compute_mapping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.compute_multiplicity">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">compute_multiplicity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.compute_multiplicity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.conditional_probability1">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">conditional_probability1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">micro_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macro_prob</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.conditional_probability1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <a class="reference internal" href="#def-conditional-probability"><span class="std std-ref">Conditional Probability</span></a>.</p>
+<p>This routine uses eq (7) from Borkovec et al. <a class="reference internal" href="algorithm.html#borkovec2000" id="id2"><span>[Borkovec2000]</span></a></p>
+<div class="math notranslate nohighlight">
+\[\pi_n(\{s_j\}) = \pi_n({s_j}) P_n(a_H)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>micro_prob</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The <a class="reference internal" href="#def-microstate-probability"><span class="std std-ref">Microstate Probability</span></a>.</p></li>
+<li><p><strong>macro_prob</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The
+<a class="reference internal" href="#def-macrostate-probability"><span class="std std-ref">Macrostate Probability</span></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.conditional_probability2">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">conditional_probability2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_enrg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.conditional_probability2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <a class="reference internal" href="#def-conditional-probability"><span class="std std-ref">Conditional Probability</span></a> of each <a class="reference internal" href="#microstate-definition"><span class="std std-ref">Microstate</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\pi_n(\{s_j\}) = \frac{e^{-\beta F(\{s_j\})}}
+                      {\sum_{\{s_j\}}e^{-\beta F(\{s_j\})}
+\delta_{n,\sum_js_j}}\]</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.error_macro_constants">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">error_macro_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_enrg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_freenrgy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.error_macro_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate error in macroconstants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>free_enrg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – dict containing the <a class="reference internal" href="#def-free-energy"><span class="std std-ref">Free Energy</span></a> for each microstate.</p></li>
+<li><p><strong>error_free_enrgy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – dict containing the free energy for each
+microstate.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.expand_name">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">expand_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.expand_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand names with multipliers.</p>
+<p>When a site has high multiplicity it is more convenient to express it with
+a number rather than with repetition (eg. <code class="samp docutils literal notranslate"><span class="pre">A3B2</span></code> instead of
+<code class="samp docutils literal notranslate"><span class="pre">AAABB</span></code>. This routine converts the former in the latter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – a compact name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an expanded name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#gems.libuk.compact_name" title="gems.libuk.compact_name"><code class="xref py py-func docutils literal notranslate"><span class="pre">compact_name()</span></code></a></p>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expand_name</span><span class="p">(</span><span class="s1">&#39;A3B3C&#39;</span><span class="p">)</span>
+<span class="go">AAABBBC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expand_name</span><span class="p">(</span><span class="s1">&#39;ABC&#39;</span><span class="p">)</span>
+<span class="go">ABC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expand_name</span><span class="p">(</span><span class="s1">&#39;A2BAAC&#39;</span><span class="p">)</span>
+<span class="go">AABAAC</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.filter_by_macro">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">filter_by_macro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.filter_by_macro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.generate_all_microstates">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">generate_all_microstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.generate_all_microstates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.generate_microstates">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">generate_microstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.generate_microstates" title="Permalink to this definition">¶</a></dt>
+<dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">generate_microstates</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">{(1, 0, 0), (0, 0, 1), (0, 1, 0)}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">generate_microstates</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">{(1, 0, 1), (1, 1, 0), (0, 1, 1)}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.kdeflation">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">kdeflation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.kdeflation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Statistical distribution of equilibrium constants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the number of protonations</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>float</em> – the deflation of the constants</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.macro_constants">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">macro_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_enrg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.macro_constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the macro constants from the energy data.</p>
+<p>Applies equation below to calculate the macro constants.</p>
+<div class="math notranslate nohighlight">
+\[\bar{K_n} = \sum_{\{s_j\}} e^{-\beta F(\{s_j\})} \delta_{n,\sum_js_j}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>free_enrg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – dict containing the free energy for each microstate.</p></li>
+<li><p><strong>n_protcentr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The number of protonation centres</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.macrostate_probability">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">macrostate_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">macro_consts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">numpy.ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">proton_activity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">numpy.ndarray</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">numpy.ndarray</span></a></span></span><a class="headerlink" href="#gems.libuk.macrostate_probability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate probability of a macrostate.</p>
+<p>Apply the equations (8) and (10) from <a class="reference internal" href="algorithm.html#borkovec2000" id="id3"><span>[Borkovec2000]</span></a> in order to calculate
+the probability of the macrostates.</p>
+<div class="math notranslate nohighlight">
+\[P_n(a_H) = \frac{\bar{K_n} a_{\rm H}^n}{\sum_{n=0}^N
+           \bar{K_n} a_{\mathrm{H}}^n}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>macro_consts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array containing the values
+if the macroconstants.</p></li>
+<li><p><strong>ah</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The activity of protons.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The probability of the macrostate.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.matrix_a">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">matrix_a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_centres</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.matrix_a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute matrix A.</p>
+<p>Compute <a class="reference internal" href="#def-a-matrix"><span class="std std-ref">A Matrix</span></a> using the equation</p>
+<div class="math notranslate nohighlight">
+\[A_{mn} = \sum_{\{s_j\}} s_m \pi_n(\{s_j\}) \delta_{n,\sum_js_j}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cond_prob</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The <a class="reference internal" href="#def-conditional-probability"><span class="std std-ref">Conditional Probability</span></a> for each
+microstate as output by <a class="reference internal" href="#gems.libuk.conditional_probability1" title="gems.libuk.conditional_probability1"><code class="xref py py-func docutils literal notranslate"><span class="pre">conditional_probability1()</span></code></a> or
+<a class="reference internal" href="#gems.libuk.conditional_probability2" title="gems.libuk.conditional_probability2"><code class="xref py py-func docutils literal notranslate"><span class="pre">conditional_probability2()</span></code></a>.</p></li>
+<li><p><strong>n_centres</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The number of protonation centres</p></li>
+<li><p><strong>n_indepctres</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The number of independent protonation centres.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The A matrix as defined above.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.matrix_b">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">matrix_b</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">macro_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shifts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.matrix_b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Least square solving for the equation below.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>macro_prob</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>shifts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The experimental chemical shifts.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[\delta_i = \delta_i^{(0)} + \sum_{m=1}^N B_{ln} P_n(a_{\mathrm{H}})\]</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As of now, NumPy does not support linear algebra for masked
+arrays. Therefore, if a masked array is passed, the linear algebra
+routines are not used. Instead, a least square minimisation is
+done. The result should be approximately the same and, for most
+cases the used will not perceive the difference.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.merge_equivalent_microstates">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">merge_equivalent_microstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">property_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#gems.libuk.merge_equivalent_microstates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.micro_constant">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">micro_constant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">microstep1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">microstep2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_energy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.micro_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the micro-equilibrium constant for two microstates.</p>
+<p>Given the free energy between two states, calculate
+.. math:: exp(-eta(F_2-F_1))</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.micro_constants">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">micro_constants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msteps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_enrg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.micro_constants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.microstate_population">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">microstate_population</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conditional_probability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.microstate_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the population for each microstate.</p>
+<p>The population for each microstate is basically computed in the
+<a class="reference internal" href="#def-conditional-probability"><span class="std std-ref">Conditional Probability</span></a> variable. However, some microstates
+are equivalent. This routine sums all equivalent microstates together and
+returns a more sensible result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conditional_probability</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – the <a class="reference internal" href="#def-conditional-probability"><span class="std std-ref">Conditional Probability</span></a>.</p></li>
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string representing the <a class="reference internal" href="#def-molecule-symmetry"><span class="std std-ref">Molecule Symmetry</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the microstate population.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.microstate_probability">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">microstate_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ah</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><span class="pre">numpy.ndarray</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#gems.libuk.microstate_probability" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate microstate probability from the energy data.</p>
+<p>The probability of a given microstate is calculates from the free energy
+terms according to:</p>
+<div class="math notranslate nohighlight">
+\[p(\{s_j\}) = \Xi^{-1} a_H^n e^{-\beta F(\{s_j\})}\]</div>
+<p>Where <span class="math notranslate nohighlight">\(\Xi = \sum_{\{s_j\}} a_H^n e^{-\beta F(\{s_j\})}\)</span>
+and <span class="math notranslate nohighlight">\(n=\sum_js_j\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>free_energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – A dict containing the free energy for each
+microstate.</p></li>
+<li><p><strong>ah</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The activity of protons.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The microstate probability for each microstate</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.microsteps">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">microsteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.microsteps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.mlstsq">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">mlstsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.mlstsq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear least squares for masked arrays.</p>
+<p>Compute the array <em>x</em> so that <span class="math notranslate nohighlight">\(||Ax - B||\)</span> is mimized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>B</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html#scipy.linalg.lstsq" title="(in SciPy v1.12.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.lstsq()</span></code></a></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function will be removed when NumPy finally supports
+masked matrix inversion.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.name_equivalent_microstates">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">name_equivalent_microstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></span><a class="headerlink" href="#gems.libuk.name_equivalent_microstates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.name_terms">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">name_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.name_terms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name the terms of the molecule at a given level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string representing the <a class="reference internal" href="#def-molecule-symmetry"><span class="std std-ref">Molecule Symmetry</span></a>.</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the level (1, 2, or 3) of the parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the sorted names of the terms</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">name_terms</span><span class="p">(</span><span class="s1">&#39;AABC&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">[&#39;A&#39;, &#39;B&#39;, &#39;C&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">name_terms</span><span class="p">(</span><span class="s1">&#39;AABC&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">[&#39;AA&#39;, &#39;AB&#39;, &#39;AC&#39;, &#39;BC&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">name_terms</span><span class="p">(</span><span class="s1">&#39;AABC&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">[&#39;AAB&#39;, &#39;AAC&#39;, &#39;ABC&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.num_prot_centres">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">num_prot_centres</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#gems.libuk.num_prot_centres" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the number of protonation centres based on dict of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – any type of data where the keys are a tuple
+of zeros and nones indicating the microstate.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the number of protonation centres.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libuk.reaction">
+<span class="sig-prename descclassname"><span class="pre">gems.libuk.</span></span><span class="sig-name descname"><span class="pre">reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ums1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ums2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">msnames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libuk.reaction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+<section id="module-gems.report">
+<span id="report-py"></span><h2>report.py<a class="headerlink" href="#module-gems.report" title="Permalink to this headline">¶</a></h2>
+<p>Routines for printing information from the data fitting.</p>
+<p>Public API</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#gems.report.report_molecule" title="gems.report.report_molecule"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.report_molecule()</span></code></a> for printing a report based on the molecule symmetry.</p></li>
+<li><p><a class="reference internal" href="#gems.report.minimal_report" title="gems.report.minimal_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.minimal_report()</span></code></a> for a small report</p></li>
+<li><p><a class="reference internal" href="#gems.report.print_report" title="gems.report.print_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_report()</span></code></a> for a full report. It includes the minimal report.</p></li>
+<li><p><a class="reference internal" href="#gems.report.generate_scheme" title="gems.report.generate_scheme"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.generate_scheme()</span></code></a></p></li>
+</ul>
+<p>Auxiliary functions</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#gems.report.section" title="gems.report.section"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.section()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_residuals" title="gems.report.print_residuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_residuals()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_nuclei_influence" title="gems.report.print_nuclei_influence"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_nuclei_influence()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_microstates" title="gems.report.print_microstates"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_microstates()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_deltamatrix" title="gems.report.print_deltamatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_deltamatrix()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_correlation" title="gems.report.print_correlation"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_correlation()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_bmatrix" title="gems.report.print_bmatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_bmatrix()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_amatrix" title="gems.report.print_amatrix"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_amatrix()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_array_half" title="gems.report.print_array_half"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_array_half()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_array_full" title="gems.report.print_array_full"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_array_full()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_array_sorted" title="gems.report.print_array_sorted"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_array_sorted()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_parameters" title="gems.report.print_parameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_parameters()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.print_populations" title="gems.report.print_populations"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.print_populations()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.report.prefit" title="gems.report.prefit"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.prefit()</span></code></a></p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.generate_scheme">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">generate_scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.generate_scheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the possible protonation pathways for a given molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string representing the expanded molecule symmetry.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>each element is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> whose keys are the possible</dt><dd><p>microstates and the values are sets which contain the possible
+protonation sites available.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gems</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">generate_scheme</span><span class="p">(</span><span class="s1">&#39;AAB&#39;</span><span class="p">)</span>
+<span class="go">[{&#39;&#39;: {&#39;A&#39;, &#39;B&#39;}},</span>
+<span class="go"> {&#39;B&#39;: {&#39;A&#39;}, &#39;A&#39;: {&#39;A&#39;, &#39;B&#39;}},</span>
+<span class="go"> {&#39;AB&#39;: {&#39;A&#39;}, &#39;AA&#39;: {&#39;B&#39;}},</span>
+<span class="go"> {&#39;AAB&#39;: set()}]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.minimal_report">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">minimal_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infodict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.minimal_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print minimal report.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.ms_to_text">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">ms_to_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.ms_to_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.prefit">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">prefit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.prefit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print initial message.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_amatrix">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_amatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_amatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print report on <a class="reference internal" href="#def-a-matrix"><span class="std std-ref">A Matrix</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amatrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the A matrix.</p></li>
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string representing the expanded molecule symmetry.</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – this is ignored</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_array_full">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_array_full</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_array_full" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a full array with labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The array to print</p></li>
+<li><p><strong>labels</strong> (<em>sequence</em>) – the labels for each row/column of the array</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_array_half">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_array_half</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_array_half" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a triangular array with labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The array to print</p></li>
+<li><p><strong>labels</strong> (<em>sequence</em>) – the labels for each row/column of the array</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_array_sorted">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_array_sorted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_array_sorted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the <em>n</em> highest values of the array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The array to print</p></li>
+<li><p><strong>labels</strong> (<em>sequence</em>) – the labels for each row/column of the array</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – the number of entries to print</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_bmatrix">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_bmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bmatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_bmatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print report on <a class="reference internal" href="#def-b-matrix"><span class="std std-ref">B Matrix</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bmatrix</strong> – </p></li>
+<li><p><strong>labels</strong> – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – this is ignored</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_correlation">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_correlation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print information on the correlation matrix.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_deltamatrix">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_deltamatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dmatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_span</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_deltamatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print report on <a class="reference internal" href="#def-delta-matrix"><span class="std std-ref">Delta Matrix</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dmatrix</strong> – </p></li>
+<li><p><strong>delta_span</strong> – </p></li>
+<li><p><strong>labels</strong> – </p></li>
+<li><p><strong>molecule</strong> – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – this is ignored</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_isomorphisms">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_isomorphisms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isomorphisms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_isomorphisms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_macroconstants">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_macroconstants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_macroconstants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_log_macroconstants</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_macroconstants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the macroconstant report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log_macroconstants</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>error_log_macroconstants</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – this is ignored</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_microstates">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_microstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infodict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_microstates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the microstates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string representing the expanded molecule symmetry.</p></li>
+<li><p><strong>free_energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – the free energy</p></li>
+<li><p><strong>error_free_energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – the error of the free energy</p></li>
+<li><p><strong>conditional_probability</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – the conditional microstate probability</p></li>
+<li><p><strong>microconstants</strong> (<em>iterable</em>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – this is ignored</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_nuclei_influence">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_nuclei_influence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xsmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_unique</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_occupation</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_nuclei_influence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the influence of each nucleus in each protonation step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xsmooth</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>ysmooth</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>labels</strong> (<em>sequence</em>) – </p></li>
+<li><p><strong>centres_unique</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>centers_occupation</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – this is ignored</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_parameters">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infodict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_populations">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_populations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_microcts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_protctrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_unique</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_unique</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">macrostate_probability</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_populations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print information of population analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_microcts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the number of microconstants in the system</p></li>
+<li><p><strong>n_protctrs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the number of protonation centres</p></li>
+<li><p><strong>centres_unique</strong> – </p></li>
+<li><p><strong>idx_unique</strong> – </p></li>
+<li><p><strong>theta</strong> – </p></li>
+<li><p><strong>xvalues</strong> – </p></li>
+<li><p><strong>macrostate_probability</strong> – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – this is ignored</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_report">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infodict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>infodict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> containing all the infomation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_residuals">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">residuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shifts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the part of the report dealing with residuals.</p>
+<p>Given a list of residuals produced by the fitting, print the larges
+<strong>n</strong> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>residuals</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>pD</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the x-values</p></li>
+<li><p><strong>shifts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the y-values</p></li>
+<li><p><strong>labels</strong> (<em>iterable</em>) – the labels associated with y-values</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>default=20</em>) – the number of residuals to print</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.print_residuals_uv">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">print_residuals_uv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">residuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absorbance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.print_residuals_uv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the part of the report dealing with residuals.</p>
+<p>Given a list of residuals produced by the fitting, print the larges
+<strong>n</strong> values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>residuals</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>pD</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the x-values</p></li>
+<li><p><strong>shifts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the y-values</p></li>
+<li><p><strong>labels</strong> (<em>iterable</em>) – the labels associated with y-values</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>default=20</em>) – the number of residuals to print</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.report_molecule">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">report_molecule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.report_molecule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print report of a given molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string representing the expanded molecule symmetry.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.repr_clasified_microstates">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">repr_clasified_microstates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">my_set</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.repr_clasified_microstates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.repr_connectivity">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">repr_connectivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connectivity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.repr_connectivity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.report.section">
+<span class="sig-prename descclassname"><span class="pre">gems.report.</span></span><span class="sig-name descname"><span class="pre">section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.report.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separate sections.</p>
+</dd></dl>
+
+</section>
+<section id="module-gems.fit">
+<span id="fit-py"></span><h2>fit.py<a class="headerlink" href="#module-gems.fit" title="Permalink to this headline">¶</a></h2>
+<p>All the routines related to fitting.</p>
+<p>Public Functions:
+* <a class="reference internal" href="#gems.fit.do_fit" title="gems.fit.do_fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">do_fit()</span></code></a>
+* <a class="reference internal" href="#gems.fit.calc_error_free_energy" title="gems.fit.calc_error_free_energy"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_error_free_energy()</span></code></a>
+* <a class="reference internal" href="#gems.fit.fit_shifts2" title="gems.fit.fit_shifts2"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_shifts2()</span></code></a>
+* <a class="reference internal" href="#gems.fit.calc_residuals2" title="gems.fit.calc_residuals2"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_residuals2()</span></code></a>
+* <code class="xref py py-func docutils literal notranslate"><span class="pre">fit_shifts()</span></code>
+* <a class="reference internal" href="#gems.fit.calc_residuals" title="gems.fit.calc_residuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">calc_residuals()</span></code></a>
+* <a class="reference internal" href="#gems.fit.rearrange_parameters" title="gems.fit.rearrange_parameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">rearrange_parameters()</span></code></a>
+* <a class="reference internal" href="#gems.fit.arrange_parameters" title="gems.fit.arrange_parameters"><code class="xref py py-func docutils literal notranslate"><span class="pre">arrange_parameters()</span></code></a></p>
+<p>Auxiliary Functions:
+* <a class="reference internal" href="#gems.fit.postfit" title="gems.fit.postfit"><code class="xref py py-func docutils literal notranslate"><span class="pre">postfit()</span></code></a>
+* <code class="xref py py-func docutils literal notranslate"><span class="pre">fobj()</span></code>
+* <a class="reference internal" href="#gems.fit.first_term" title="gems.fit.first_term"><code class="xref py py-func docutils literal notranslate"><span class="pre">first_term()</span></code></a>
+* <a class="reference internal" href="#gems.fit.build_terms" title="gems.fit.build_terms"><code class="xref py py-func docutils literal notranslate"><span class="pre">build_terms()</span></code></a></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.arrange_parameters">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">arrange_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expmolec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initvals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.arrange_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the initial parameter array from initial guess.</p>
+<p>Construct an initial array filled with zeros and then insert
+the given parameters in its proper places, leaving the not given
+parameters as zeros. Additional initial values given are ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expmolec</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – a string defining the expanded symmetry of the
+molecule.</p></li>
+<li><p><strong>initvals</strong> (<em>iterable</em>) – list of initial values</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the order of interactions (1, 2 or 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A 1D array with the parameters arranged in</dt><dd><p>the proper order.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if the order parameter is not within 1–3.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.aux_fitting1">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">aux_fitting1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_uv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.aux_fitting1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary function for fitting routines.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.build_terms">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">build_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.build_terms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct epsilon and lambda matrices from parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – a string defining the summetry of the molecule.</p></li>
+<li><p><strong>args</strong> (<em>sequence</em>) – a sequence containing the parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the first element is a 2D array containing the binary terms;</dt><dd><p>the second is a 3D array containing the tertiary terms.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.calc_error_free_energy">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">calc_error_free_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_microcts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.calc_error_free_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the error in free energy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – the symmetry of the molecule</p></li>
+<li><p><strong>variance</strong> (<em>sequence</em>) – the variance in the free energy</p></li>
+<li><p><strong>n_microcts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the number of microconstants</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.calc_residuals">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">calc_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shifts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proton_activity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.calc_residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals.</p>
+<p>The fitting is done by equation
+<span class="math notranslate nohighlight">\(\delta_l = \delta_l^{(0)} + \sum_{n=1}^N B_{ln} P_n (a_H)\)</span>
+by fitting the experimental chemical shifts to the calculated
+<span class="math notranslate nohighlight">\(P_n(a_H)\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>free_energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – the free energy</p></li>
+<li><p><strong>shifts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the chemical shifts</p></li>
+<li><p><strong>proton_activity</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the proton activity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the residuals</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.calc_residuals2">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">calc_residuals2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shifts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proton_activity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.calc_residuals2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the residuals.</p>
+<p>The fitting is done by equation
+<span class="math notranslate nohighlight">\(\delta_l = \delta_l^{(0)} + \sum_{m=1}^N \Delta_{lm} P_n (a_H)\)</span>
+by fitting the experimental chemical shifts to the calculated
+<span class="math notranslate nohighlight">\(P_n(a_H)\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>free_energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – the free energy</p></li>
+<li><p><strong>shifts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the chemical shifts</p></li>
+<li><p><strong>proton_activity</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the proton activity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the residuals</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.do_fit">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">do_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">init_vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expmolec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ah</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shifts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.do_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit data.</p>
+<p>Calls <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimization.minimize()</span></code> in order to minimize
+<code class="xref py py-func docutils literal notranslate"><span class="pre">fobj()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>init_vars</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.5: </span>Added option <em>weights</em></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.first_term">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">first_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.first_term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return first term.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.fit_shifts2">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">fit_shifts2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shifts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.fit_shifts2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return calculated chemical shifts.</p>
+<p>The calculated chemical shifts are computed according to the equation
+below. The parameter <em>shifts</em> can be a <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.ndarray</span></code>; in this
+case, the missing values are zeroed.</p>
+<div class="math notranslate nohighlight">
+\[\delta^{\rm calc} = \theta \cdot
+\left(\delta^{\rm exp} \cdot \theta^+\right)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>macro_prob</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The  macrostate probability.</p></li>
+<li><p><strong>shifts</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The experimental chemical shifts.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the calculated chemical shifts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.fobj_preparation">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">fobj_preparation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proton_activity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fresiduals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.fobj_preparation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.postfit">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">postfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">retval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.postfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Complete calculations after the fitting has been done.</p>
+<p>The input is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> with some data (see below). This function
+updates the dict with a lot of additional data.</p>
+<ul class="simple">
+<li><p>n_nuclei (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>): the number of nuclei</p></li>
+<li><p>molecule (str): the symmetry of the molecule</p></li>
+<li><p>n_microcts (int): the number of microconstants in the system</p></li>
+<li><p>n_protctrs (int): the number of protonation centres</p></li>
+<li><p>ah (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>iterations (int): the number of iterations</p></li>
+<li><dl class="simple">
+<dt>function_evaluations (int): the number of times the <code class="xref py py-func docutils literal notranslate"><span class="pre">fobj()</span></code> has</dt><dd><p>been evaluated.</p>
+</dd>
+</dl>
+</li>
+<li><p>success</p></li>
+<li><p>message</p></li>
+<li><p>chisq (float): the final sum of squared residuals</p></li>
+<li><p>covariance</p></li>
+<li><p>fit_params1 (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>fit_params2 (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>fit_params3 (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>err_params1 (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>err_params2 (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>err_params3 (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>correlation</p></li>
+<li><p>free_energy (dict):</p></li>
+<li><p>error_free_energy</p></li>
+<li><p>residuals</p></li>
+<li><p>microstate_probability</p></li>
+<li><p>theta</p></li>
+<li><p>conditional_probability</p></li>
+<li><p>macroconstants</p></li>
+<li><p>error_macroconstants</p></li>
+<li><p>macrostate_probability</p></li>
+<li><p>microstate_population (dict):</p></li>
+<li><p>bmatrix (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>):</p></li>
+<li><p>microconstants</p></li>
+<li><p>centres_unique</p></li>
+<li><p>idx_unique</p></li>
+<li><p>amatrix</p></li>
+<li><p>dmatrix</p></li>
+<li><p>delta_span</p></li>
+<li><p>smooth_ah</p></li>
+<li><p>xsmooth</p></li>
+<li><p>ysmooth</p></li>
+<li><p>distribution</p></li>
+<li><p>centres_occupation</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>retval</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> that must contain the following fields
+<em>xvalues</em> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+<em>yvalues</em> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+<em>result</em> (<code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.optimize.OptimizationResult</span></code>),
+<em>labels</em> (sequence), <em>molecule</em> (str). This variable is modified
+during the call.</p></li>
+<li><p><strong>smooth_points</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – the number of points that will be used in the
+smooth fitting result.</p></li>
+<li><p><strong>n_nuclei</strong> (<em>*</em>) – The number of nuclei</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.rearrange_parameters">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">rearrange_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_errors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.rearrange_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rearrange a flattened array of parameters into order-sorted arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>iterable</em>) – a 1D array containing ordered parameters</p></li>
+<li><p><strong>param_errors</strong> (<em>iterable</em>) – a 1D array containing ordered parameter errors</p></li>
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string representing the molecule symmetry</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – A number indicating the interaction order level (1..3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>fit_params1, err_params1, fit_params2, err_params2,</dt><dd><p>fit_params3, err_params3</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.run_fitting">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">run_fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keywords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag_uv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.run_fitting" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.fit.spectra_weighting">
+<span class="sig-prename descclassname"><span class="pre">gems.fit.</span></span><span class="sig-name descname"><span class="pre">spectra_weighting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.fit.spectra_weighting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate automatic spectra weighting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – </p></li>
+<li><p><strong>w0</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gems.plotter">
+<span id="plotter-py"></span><h2>plotter.py<a class="headerlink" href="#module-gems.plotter" title="Permalink to this headline">¶</a></h2>
+<p>Collection of routines for plotting data.</p>
+<section id="plotting-functions-with-pyplot">
+<h3>Plotting functions with pyplot<a class="headerlink" href="#plotting-functions-with-pyplot" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#gems.plotter.do_plot" title="gems.plotter.do_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">do_plot()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.plotter.plot_fitting" title="gems.plotter.plot_fitting"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_fitting()</span></code></a></p></li>
+</ul>
+</section>
+<section id="plotting-functions-in-axes">
+<h3>Plotting functions in Axes<a class="headerlink" href="#plotting-functions-in-axes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#gems.plotter.plot_distribution" title="gems.plotter.plot_distribution"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_distribution()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.plotter.plot_dshifts" title="gems.plotter.plot_dshifts"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_dshifts()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.plotter.plot_microconstants" title="gems.plotter.plot_microconstants"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_microconstants()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.plotter.plot_energies" title="gems.plotter.plot_energies"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_energies()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.plotter.plot_shifts" title="gems.plotter.plot_shifts"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_shifts()</span></code></a></p></li>
+<li><p>:func`plot_uvbmatrix`</p></li>
+<li><p>:func`plot_uv_residuals`</p></li>
+</ul>
+</section>
+<section id="auxiliary-plotting-functions">
+<h3>Auxiliary plotting functions<a class="headerlink" href="#auxiliary-plotting-functions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="#gems.plotter.point_microconstants" title="gems.plotter.point_microconstants"><code class="xref py py-func docutils literal notranslate"><span class="pre">point_microconstants()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.plotter.annotate_microconstants" title="gems.plotter.annotate_microconstants"><code class="xref py py-func docutils literal notranslate"><span class="pre">annotate_microconstants()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#gems.plotter.make_lines" title="gems.plotter.make_lines"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_lines()</span></code></a></p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="gems.plotter.Plotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">master</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.Plotter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://matplotlib.org/stable/api/backend_tk_api.html#matplotlib.backends.backend_tkagg.FigureCanvasTkAgg" title="(in Matplotlib v3.8.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.backends.backend_tkagg.FigureCanvasTkAgg</span></code></a></p>
+<p>Override FigureCanvas.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gems.plotter.Plotter.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.Plotter.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.annotate_microconstants">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">annotate_microconstants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.annotate_microconstants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert microconstants annotation into graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xvalues</strong> (<em>iterable</em>) – the x values of the label position.</p></li>
+<li><p><strong>yvalues</strong> (<em>iterable</em>) – the y values of the label position.</p></li>
+<li><p><strong>labels</strong> (<em>iterable</em>) – the labels</p></li>
+<li><p><strong>axes</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.8.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a>) – the axes to plot into.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.do_plot">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">do_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infodict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.do_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot everything for NMR data.</p>
+<p>Pops new windows with the plots for all the information contained in
+the dict.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.do_plot_spectra">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">do_plot_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infodict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.do_plot_spectra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot everything for spectra.</p>
+<p>Pops new windows with the plots for all the information contained in
+the dict.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.make_lines">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">make_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">micro_constants</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.make_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate where to draw the energy levels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>micro_constants</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – the microconstants</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>the coordinates of the lines to be drawn in the format</dt><dd><p>((x1, y1), (x2, y2))</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_distribution">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_occupation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_unique</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_protctrs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the macrospecies and microspecies distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.Axes.axes</span></code>) – the axes to plot into.</p></li>
+<li><p><strong>xsmooth</strong> – </p></li>
+<li><p><strong>distribution</strong> – </p></li>
+<li><p><strong>centres_occupation</strong> – </p></li>
+<li><p><strong>centres_unique</strong> – </p></li>
+<li><p><strong>n_protctrs</strong> – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Ignored</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#gems.fit.postfit" title="gems.fit.postfit"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.fit.postfit()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_dshifts">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_dshifts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llabels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_occupation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_unique</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_dshifts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_energies">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_energies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ums_free_energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_protctrs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_energies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot energies.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_fitting">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_occupation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_unique</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_fitting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot fitting.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_microconstants">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_microconstants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepwise_macroconstants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">microconstants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_protctrs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_microconstants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot microconstants.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_shifts">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_shifts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llabels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yvalues</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysmooth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centres_occupation</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_shifts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot chemical shifts and distribution in background.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_uv_residuals">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_uv_residuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xdim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residuals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_uv_residuals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot residuals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>axes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.Axes.axes</span></code>) – the axes to plot into.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.plot_uvbmatrix">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">plot_uvbmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bmatrix</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.plot_uvbmatrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.plotter.point_microconstants">
+<span class="sig-prename descclassname"><span class="pre">gems.plotter.</span></span><span class="sig-name descname"><span class="pre">point_microconstants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">micro_constants</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">molecule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.plotter.point_microconstants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate positions for microconstant labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>micro_constants</strong> (<em>iterable</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>where [0] and [1] are the <em>x</em>  and <em>y</em>  coordinates of the label,</dt><dd><p>and [2] are the labels.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-gems.libio">
+<span id="libio-py"></span><h2>libio.py<a class="headerlink" href="#module-gems.libio" title="Permalink to this headline">¶</a></h2>
+<p>This module contains the reading/writing and import/export routines.</p>
+<p>Import/export fitting data to/from NumPy array
+* <a class="reference internal" href="#gems.libio.import_numpy" title="gems.libio.import_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">import_numpy()</span></code></a>
+* <a class="reference internal" href="#gems.libio.export_numpy" title="gems.libio.export_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">export_numpy()</span></code></a></p>
+<p>Load data from file
+* <a class="reference internal" href="#gems.libio.load_stream" title="gems.libio.load_stream"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_stream()</span></code></a>
+* <a class="reference internal" href="#gems.libio.load_spectra_stream" title="gems.libio.load_spectra_stream"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_spectra_stream()</span></code></a>
+* <a class="reference internal" href="#gems.libio.load_file_spectra" title="gems.libio.load_file_spectra"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_file_spectra()</span></code></a>
+* <a class="reference internal" href="#gems.libio.load_file" title="gems.libio.load_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_file()</span></code></a></p>
+<p>Auxiliary/Internal functions
+* <a class="reference internal" href="#gems.libio.test_modules" title="gems.libio.test_modules"><code class="xref py py-func docutils literal notranslate"><span class="pre">test_modules()</span></code></a>
+* <a class="reference internal" href="#gems.libio.print_welcome" title="gems.libio.print_welcome"><code class="xref py py-func docutils literal notranslate"><span class="pre">print_welcome()</span></code></a>
+* <a class="reference internal" href="#gems.libio.prune_data" title="gems.libio.prune_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">prune_data()</span></code></a></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.export_numpy">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">export_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">infodict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.export_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write all information into NumPy format file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – the file name.</p></li>
+<li><p><strong>infodict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – all the information (see <a class="reference internal" href="#gems.fit.postfit" title="gems.fit.postfit"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.fit.postfit()</span></code></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.import_numpy">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">import_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.import_numpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read information from NumPy format file.</p>
+<p>Uses <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.load.html#numpy.load" title="(in NumPy v1.26)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.load()</span></code></a> and then applies some type conversions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – the file to read from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data read</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.load_file">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">load_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.load_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open file and load its contents.</p>
+<p>A text file containing the data to be fit. See
+<a class="reference internal" href="index.html#data-file-format"><span class="std std-ref">Data File Format</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The file to read from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>title (str), molecule (str), initial values (list of floats),</dt><dd><p>labels (list of strings), pH (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+shifts (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libio.loadstream()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.load_file_spectra">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">load_file_spectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.load_file_spectra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open file containing spectral data and load its contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The file to read from</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>title (str), molecule (str), initial values (list of floats),</dt><dd><p>pH (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+wavelength (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+absorbances (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#gems.libio.load_file" title="gems.libio.load_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_file()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.load_spectra_stream">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">load_spectra_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamio</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.load_spectra_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read datastream containing spectral data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>streamio</strong> (<em>StreamIOr</em>) – The data stream</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>title (str), molecule (str), initial values (list of floats),</dt><dd><p>pH (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+wavelength (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+absorbances (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#gems.libio.load_file_spectra" title="gems.libio.load_file_spectra"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_file_spectra()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.load_stream">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">load_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streamio</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.load_stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data from data stream.</p>
+<p>For details on the file data format, see <a class="reference internal" href="index.html#data-file-format"><span class="std std-ref">Data File Format</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>streamio</strong> (<em>file</em>) – The strem to read data from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>title (str), molecule (str), initial values (list of floats),</dt><dd><p>labels (list of strings), pH (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>),
+shifts (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.print_welcome">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">print_welcome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.print_welcome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print welcome message.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.process_keywords">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">process_keywords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.process_keywords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.prune_data">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">prune_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows_ignored</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols_ignored</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_labels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.prune_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove unused data from the bulk of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – the initial data.</p></li>
+<li><p><strong>rows_ignored</strong> (<em>sequence</em>) – </p></li>
+<li><p><strong>cols_ignored</strong> (<em>sequence</em>) – </p></li>
+<li><p><strong>row_labels</strong> (<em>sequence</em>) – </p></li>
+<li><p><strong>col_labels</strong> (<em>sequence</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>item[0] is <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> the pruned data, item[1] and item[2] are</dt><dd><p>the respective row_labels and col_labels pruned.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gems.libio.test_modules">
+<span class="sig-prename descclassname"><span class="pre">gems.libio.</span></span><span class="sig-name descname"><span class="pre">test_modules</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gems.libio.test_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the modules.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Algorithm Details</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Public GEMS API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#variable-definition">variable definition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#free-energy">Free Energy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#microstate">Microstate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#microstate-probability">Microstate Probability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macrostate-probability">Macrostate Probability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conditional-probability">Conditional Probability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#molecule-symmetry">Molecule Symmetry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#a-matrix">A Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b-matrix">B Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#delta-matrix">Delta Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gems.libuk">libuk.py</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#microstates-nomenclature">Microstates Nomenclature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions-for-multiplicity-and-combinatory">Functions for Multiplicity and Combinatory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#terms-calculations">Terms calculations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gems.report">report.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gems.fit">fit.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gems.plotter">plotter.py</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-functions-with-pyplot">Plotting functions with pyplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plotting-functions-in-axes">Plotting functions in Axes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#auxiliary-plotting-functions">Auxiliary plotting functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gems.libio">libio.py</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">GEMS Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="algorithm.html" title="previous chapter">Algorithm Details</a></li>
+      <li>Next: <a href="changelog.html" title="next chapter">GEMS Changelog</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Salvador Blasco.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
