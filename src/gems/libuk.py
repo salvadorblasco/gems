@@ -155,6 +155,16 @@ def name_equivalent_microstates(molecule: str, mapping: dict) -> dict:
     return retv
 
 
+def reaction(ums1: tuple, ums2: tuple, molecule: str, msnames: dict):
+    # breakpoint()
+    react = msnames[ums1]
+    prodt = msnames[ums2]
+    proton = list(prodt)
+    for l in react:
+        proton.remove(l)
+    return react, "".join(proton), prodt
+
+
 # ------------------------------------------------
 #   Functions for Multiplicity and Combinatory
 # ------------------------------------------------

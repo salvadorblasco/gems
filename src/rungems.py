@@ -88,6 +88,7 @@ def run():
         else:
             gems.fit.postfit(infodict)
 
+        infodict['keywords'] = keywords
         if parsed_args.verbosity == 2:
             gems.report.print_report(infodict)
         else:

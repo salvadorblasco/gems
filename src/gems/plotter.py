@@ -199,28 +199,28 @@ def plot_dshifts(axes, lst, llabels, xsmooth, ysmooth, centres_occupation, centr
     twin_ax.set_navigate(False)
 
 
-def plot_energies(axes, molecule, free_energy, **kwargs):
+def plot_energies(axes, msnames, ums_free_energy, n_protctrs, **kwargs):
     """Plot energies.
     """
-    for ms, energy in free_energy.items():
-        n = sum(ms)
-        name = gems.libuk.name_microstate(molecule, ms)
+    for ms, energy in ums_free_energy.items():
+        n = sum(ms[0])
+        # name = gems.libuk.name_microstate(molecule, ms)
+        name = msnames[ms]
         axes.annotate(name, (n, energy), xytext=(0, 10),
                       textcoords='offset points', ha='center')
         axes.hlines(energy, n-0.4, n+0.4, colors='blue', label='X')
 
     axes.set_ylabel(r'$\Delta G/RT$')
     axes.set_xlabel('degree of protonation')
-    axes.set_xticks(range(len(molecule)+1))
+    axes.set_xticks(range(n_protctrs+1))
 
 
-def plot_microconstants(axes, stepwise_macroconstants, msnames, microconstants,
+def plot_microconstants(axes, stepwise_macroconstants, msnames, molecule, microconstants,
                         n_protctrs, **kwargs):
     """Plot microconstants."""
     axes.scatter(np.arange(1, n_protctrs + 1), stepwise_macroconstants,
                  s=50.0, color='red', zorder=3.0)
-
-    out_x, out_y, labels = point_microconstants(msnames, microconstants)
+    out_x, out_y, labels = point_microconstants(msnames, microconstants, molecule)
 
     axes.scatter(out_x, out_y, color='blue', s=30.0, zorder=2.0)
     for line in make_lines(microconstants):
@@ -302,7 +302,7 @@ def annotate_microconstants(xvalues, yvalues, labels, axes):
         axes.annotate(l, (x, y), **properties)
 
 
-def point_microconstants(msnames, micro_constants):
+def point_microconstants(msnames, micro_constants, molecule):
     """Calculate positions for microconstant labels.
 
     Parameters:
@@ -318,18 +318,20 @@ def point_microconstants(msnames, micro_constants):
     labels = []
     # breakpoint()
     for ms, msteps in micro_constants.items():
-        _root_label_ = msnames[ms]
-        # _root_label_ = gems.libuk.name_microstate(molecule, ms)
-        if _root_label_ == '':
-            _root_label_ = 'Ø'
+        # _root_label_ = msnames[ms]
+        # # _root_label_ = gems.libuk.name_microstate(molecule, ms)
+        # if _root_label_ == '':
+        #     _root_label_ = 'Ø'
         n = sum(ms[0]) + 1
         for mstep, mk in msteps.items():
-            added = msnames[mstep].replace(_root_label_, '')
-            new_label = _root_label_ + '+' + added
-            if new_label in labels:
-                continue
+            react, proton, prodt = gems.libuk.reaction(ms, mstep, molecule, msnames)
+            # added = msnames[mstep].replace(_root_label_, '')
+            #new_label = _root_label_ + '+' + added
+            #if new_label in labels:
+            #    continue
 
             out_x.append(n)
             out_y.append(mk)
-            labels.append(new_label)
+            #labels.append(new_label)
+            labels.append(f"{react}+{proton}")
     return out_x, out_y, labels

@@ -63,8 +63,10 @@ class Application(tk.Frame):
         options_menu.add_separator()
 
         self.uvvis = tk.BooleanVar(value=False)
+        self.dryrun = tk.BooleanVar(value=False)
         options_menu.add_radiobutton(label="NMR data", variable=self.uvvis, value=False)
         options_menu.add_radiobutton(label="UV-vis data", variable=self.uvvis, value=True)
+        options_menu.add_radiobutton(label="dry run", variable=self.dryrun, value=False)
 
         menu.add_cascade(label="Options", menu=options_menu)
 
@@ -141,16 +143,18 @@ class Application(tk.Frame):
 
             if self.uvvis.get():
                 # data_args = gems.libio.load_spectra_stream(inputstream)
-                title, molecule, ini_vals, pH, wavelength, yvalues = data_args
+                title, molecule, ini_vals, keywords, pH, wavelength, yvalues = data_args
                 labels = wavelength
             else:
                 # data_args = gems.libio.load_stream(inputstream)
-                title, molecule, ini_vals, labels, pH, yvalues = data_args
+                title, molecule, ini_vals, keywords, labels, pH, yvalues = data_args
 
         with contextlib.redirect_stdout(io.StringIO()) as output:
             order = self.order.get()
-            infodict = gems.fit.aux_fitting1(title, pH, yvalues, molecule, ini_vals, order,
-                                             self.uvvis.get())
+            # infodict = gems.fit.aux_fitting1(title, pH, yvalues, molecule, ini_vals, order,
+            #                                  self.uvvis.get(), False)
+            infodict = gems.fit.run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order,
+                                            self.uvvis.get(), self.dryrun.get())
             infodict['labels'] = labels
 
             if self.uvvis.get():

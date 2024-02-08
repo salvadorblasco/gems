@@ -14,7 +14,7 @@ import gems.libuk
 
 
 class FittingParams():
-    def __init__(self, mapping):
+    def __init__(self, mapping, msnames):
         self.constraints = {}
         self.restraints = []
         self.restrained_ids = []
@@ -22,6 +22,7 @@ class FittingParams():
         self.levels = {}
         self.size = len(tuple(mapping.keys())[0])
         self.mapping = mapping
+        self.msnames = {val: kw for kw, val in msnames.items()}  # here the naming is reversed
 
         parm_keys = itertools.chain.from_iterable([tuple(gems.libuk.filter_by_macro(mapping, n)) for n in (1,2,3)])
         self.parameters = dict.fromkeys(set(parm_keys), 0.0)
@@ -36,17 +37,20 @@ class FittingParams():
         self.revid = {aux[k]:n for n, k in enumerate(sorted(aux))}
 
     def create_constraint(self, msid):
-        microstate = self.ids[msid]
+        #microstate = self.ids[msid]
+        microstate = self.msnames[msid]
         self.constraints[microstate] = self.parameters.pop(microstate)
 
-    def create_restraint(self, ids):
-        aux = [self.parameters[self.ids[i]] for i in ids]
+    def create_restraint(self, umsnames):
+        breakpoint()
+        aux = [self.parameters[self.msnames[i]] for i in umsnames]
+        ids = [self.revid[self.msnames[i]] for i in umsnames]
         values = [v/aux[0] for v in aux]
         self.restraints.append(ids)
         self.restrained_ids.extend(ids)
         self.restraint_values.append(values)
-        for i in ids[1:]:
-            del self.parameters[self.ids[i]]
+        for i in umsnames[1:]:
+            del self.parameters[self.msnames[i]]
 
     def error_free_energy(self, microstate, max_level=3):
         mult = (1, 1/2, 1/6)
@@ -85,7 +89,7 @@ class FittingParams():
             n, _, _ = self.__locate_restraint(c)
             return f"restrained[{n}]"
         else:
-            return "refine"
+            return "refined"
 
     def evmc(self, microstate):
         return self.__common_vmc(microstate, True)

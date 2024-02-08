@@ -38,14 +38,17 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
     gems.report.prefit(title, len(pH), yvalues.size)
     expmolec = gems.libuk.expand_name(molecule)
 
-    connectivity = gems.libuk.compute_connectivity(expmolec)
+    if 'matrix' in keywords:
+        connectivity = keywords['matrix']
+    else:
+        connectivity = gems.libuk.compute_connectivity(expmolec)
     isomorphisms = gems.libuk.compute_isomorphisms(expmolec, connectivity)
     mapping = gems.libuk.compute_mapping(expmolec, isomorphisms)
     msteps = gems.libuk.microsteps(len(expmolec), mapping)
     ms_naming = gems.libuk.name_equivalent_microstates(expmolec, mapping)
-    parameters = gems.vmc.FittingParams(mapping)
+    parameters = gems.vmc.FittingParams(mapping, ms_naming)
     parameters.set_values(ini_vals)
-    _apply_keywords(keywords)
+    _apply_keywords(keywords, parameters)
 
     proton_activity = 10**-pH
     if flag_uv:
@@ -66,10 +69,10 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
     else:
         retv = scipy.optimize.minimize(fobj, ini_vals, method=method)
     infodict = {'xvalues': pH, 'yvalues': yvalues, 'result': retv,
+                'input_molecule': molecule,
                 'molecule': expmolec, 'order': order, 'parameters': parameters,
                 'mapping': mapping, 'isomorphisms': isomorphisms, 'connectivity': connectivity,
                 'microsteps': msteps, 'msnames': ms_naming}
-
     return infodict
 
 
@@ -84,16 +87,21 @@ def fobj_preparation(parameters, order, proton_activity, yvalues, weights, fresi
     return fobj
 
 
-def _apply_keywords(args):
-    for kw, arg in args:
-        if kw == 'fix':
-            value = int(arg)
-            parameters.create_constraint(value)
-        elif kw == 'restraint':
-            values = (int(_) for _ in arg.split())
-            parameters.create_restraint(values)
-        else:
-            raise ValueError
+def _apply_keywords(args, parameters):
+    for kw in args:
+        match kw:
+            case 'fix':
+                fixes = args[kw]
+                for fix in fixes:
+                    parameters.create_constraint(fix)
+            case 'restrain':
+                restraints = args[kw]
+                for restraint in restraints:
+                    parameters.create_restraint(restraint)
+            case 'matrix':
+                pass
+            case other:
+                raise ValueError
 
 
 def _calc_free_energy(parameters):
@@ -629,7 +637,6 @@ def _aux_postfit4(retval):
                                                  retval['ums_free_energy'])
     retval['bmatrix'] = bmatrix
     retval['microconstants'] = micro_constants
-    print(micro_constants)
     err_lg_beta = 0.434294*np.sqrt(calc_beta_error)/calc_beta
     retval['log_macroconstants'] = np.log10(calc_beta)
     retval['error_log_macroconstants'] = err_lg_beta

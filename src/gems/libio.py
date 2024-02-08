@@ -1,7 +1,7 @@
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 # ! This file is part of the GEMS software                                      !
 # !                                                                             !
-# ! Copyright (c) 2020-2021 by Salvador Blasco <salvador.blasco@protonmail.com> !
+# ! Copyright (c) 2020-2024 by Salvador Blasco <salvador.blasco@protonmail.com> !
 # ! Licensed under MIT license (see file LICENSE)                               !
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 
@@ -200,16 +200,16 @@ def print_welcome():
     print(welcome)
 
 
-def process_keywords(args):
-    rekw = re.compile(r'(fix|restrain) (.*)', re.IGNORECASE)
-    retv = []
-    for arg in args:
-        if (m := rekw.fullmatch(arg.strip())) is None:
-            print("Warning: keyword not recognised. It will be ignored")
-            print(" > ", arg)
-        else:
-            retv.append((m.group(1), m.group(2)))
-    return retv
+# def process_keywords(args):
+#     rekw = re.compile(r'(fix|restrain) (.*)', re.IGNORECASE)
+#     retv = []
+#     for arg in args:
+#         if (m := rekw.fullmatch(arg.strip())) is None:
+#             print("Warning: keyword not recognised. It will be ignored")
+#             print(" > ", arg)
+#         else:
+#             retv.append((m.group(1), m.group(2)))
+#     return retv
 
 
 def test_modules():
@@ -223,14 +223,31 @@ def test_modules():
 
 def __load_header(streamio):
     title = streamio.readline().strip()
-    keywords = []
+    keywords = {}
     while True:
-        line = streamio.readline().strip()
-        if line[0] == '$':
-            keywords.append(line[1:])
-        else:
-            break
+        line = streamio.readline().strip().upper()
+        match line.split():
+            case ['$MATRIX', var1]:
+                n = int(var1)
+                mt = " ".join(streamio.readline().strip() for _ in range(n))
+                m = np.fromstring(mt, dtype=int, sep=' ').reshape((n,n))
+                keywords['matrix'] = m
+            case ['$FIX', param]:
+                __push_param(keywords, 'fix', param)
+            case ['$RESTRAIN', *param]:
+                __push_param(keywords, 'restrain', tuple(param))
+            case other:
+                if line[0] == '$':
+                    raise ValueError(f"Invalid keyword: {_}")
+                break
     molecule = line
     aux = streamio.readline().strip()
     ini_vals = [float(s) for s in aux.split()]
-    return title, molecule, ini_vals, process_keywords(keywords)
+    return title, molecule, ini_vals, keywords
+
+
+def __push_param(mydict: dict, kw: str, param):
+    if kw in mydict:
+        mydict[kw].append(param)
+    else:
+        mydict[kw] = [param]

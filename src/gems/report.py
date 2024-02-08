@@ -1,7 +1,7 @@
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 # ! This file is part of the GEMS software                                   !
 # !                                                                          !
-# ! Copyright (c) 2020-2021 by Salvador Blasco <salvador.blasco@gmail.com>   !
+# ! Copyright (c) 2020-2024 by Salvador Blasco <salvador.blasco@gmail.com>   !
 # ! Licensed under MIT license (see file LICENSE)                            !
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 
@@ -33,6 +33,7 @@ Auxiliary functions
 
 """
 
+import enum
 import itertools
 
 import numpy as np
@@ -41,11 +42,14 @@ import gems.fit
 import gems.libuk
 
 
-VERBOSITY_MINIMAL = 0
-VERBOSITY_REGULAR = 1
-VERBOSITY_VERBOSE = 2
 
-verbosity = VERBOSITY_REGULAR
+class Verbosity(enum.Enum):
+    VERBOSITY_MINIMAL = enum.auto()
+    VERBOSITY_REGULAR = enum.auto()
+    VERBOSITY_VERBOSE = enum.auto()
+
+
+verbosity = Verbosity.VERBOSITY_REGULAR
 
 
 def prefit(title, n_points, n_data):
@@ -96,7 +100,8 @@ def print_parameters(infodict: dict):
             name = nms[ums]
             val = parms.vmc(ums[0])
             err = parms.evmc(ums[0])
-            print(f'      {name:>8}:  {val:>10.4f} ± {err:.4f}')
+            stat = parms.microstate_status(ums[0])
+            print(f'      {name:>8}:  {val:>10.4f} ± {err:.4f}  {stat}')
 
 def print_report(infodict):
     """Print report.
@@ -107,7 +112,7 @@ def print_report(infodict):
     .. seealso: :func:`fit.postfit`
 
     """
-
+    print_molecule(**infodict)
     if infodict['result'] is not None:
         minimal_report(infodict)
     else:
@@ -346,9 +351,9 @@ def print_microstates(infodict: dict):
     # ums_population = gems.libuk.merge_equivalent_microstates(mapping, condprob, lambda x, y: x+y)
     # ums_free = gems.libuk.merge_equivalent_microstates(mapping, free_energy, lambda x, y: x)
     # ums_efree = gems.libuk.merge_equivalent_microstates(mapping, error_free_energy, lambda x, y: x)
-    ums_population = infodict['ums_free_energy']
-    ums_free = infodict['ums_error_free_energy']
-    ums_efree = infodict['ums_population']
+    ums_population = infodict['ums_population']
+    ums_free = infodict['ums_free_energy']
+    ums_efree = infodict['ums_error_free_energy']
     microconstants = infodict['microconstants']
 
     section('Microstates and Microsteps Analysis')
@@ -390,6 +395,28 @@ def print_microstates(infodict: dict):
     #     print(fmt.format(name_, fnwe, 100*microstate_population[name]))
     #     for mstep, mk in microconstants[key].items():
     #         print('      + {:10} {:10.3f}'.format(mstep, mk))
+
+
+def print_molecule(input_molecule, molecule, connectivity, isomorphisms, keywords, **kwargs):
+    """Print report of a given molecule.
+
+    Parameters:
+        molecule (str): A string representing the expanded molecule symmetry.
+
+    """
+    print(f"Input molecule: {input_molecule}")
+    print()
+    print("Expanded molecule: ", molecule, '\n')
+    if 'matrix' in keywords:
+        print("Given connectivity matrix")
+        repr_connectivity(connectivity, molecule)
+    else:
+        print("Tentative connectivity matrix")
+        repr_connectivity(connectivity, molecule)
+        print("   NOTE: if this matrix does not correctly represent your molecule you have to input the matrix by hand.")
+    print()
+    print(f"found {len(isomorphisms)} isomorphisms")
+    print()
 
 
 def print_nuclei_influence(xsmooth, ysmooth, labels, centres_unique, centres_occupation,
