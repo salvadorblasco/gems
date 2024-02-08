@@ -1,24 +1,25 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GEMS Changelog &#8212; gems 0.5 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Public GEMS API" href="api.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -28,82 +29,79 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
-  <section id="gems-changelog">
+  <div class="section" id="gems-changelog">
 <h1>GEMS Changelog<a class="headerlink" href="#gems-changelog" title="Permalink to this headline">¶</a></h1>
-<section id="version-0-7">
+<div class="section" id="version-0-7">
 <h2>Version 0.7<a class="headerlink" href="#version-0-7" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Added routines for fitting UV-vis spectra.</p></li>
-<li><p>Added menus to GUI for fitting options</p></li>
-<li><p>(lots of) Code cleanup to avoid duplicated code</p></li>
-<li><p>Added ‘About’ dialog in GUI</p></li>
+<li>Added routines for fitting UV-vis spectra.</li>
+<li>Added menus to GUI for fitting options</li>
+<li>(lots of) Code cleanup to avoid duplicated code</li>
+<li>Added ‘About’ dialog in GUI</li>
 </ul>
-</section>
-<section id="version-0-6">
+</div>
+<div class="section" id="version-0-6">
 <h2>Version 0.6<a class="headerlink" href="#version-0-6" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Code cleaning</p></li>
-<li><p>Bug corrected on wrong population calculations</p></li>
-<li><p>new <a class="reference internal" href="api.html#gems.libuk.microstate_population" title="gems.libuk.microstate_population"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.microstate_population()</span></code></a>.</p></li>
-<li><p>Improved setup.py</p></li>
-<li><p>Deprecated functions removed from <a class="reference internal" href="api.html#module-gems.libuk" title="gems.libuk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libuk</span></code></a>.</p></li>
-<li><p>Added <a class="reference internal" href="api.html#gems.libio.import_numpy" title="gems.libio.import_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libio.import_numpy()</span></code></a> to factilitate type conversion when importing from NumPy arrays.</p></li>
+<li>Code cleaning</li>
+<li>Bug corrected on wrong population calculations</li>
+<li>new <a class="reference internal" href="api.html#gems.libuk.microstate_population" title="gems.libuk.microstate_population"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.microstate_population()</span></code></a>.</li>
+<li>Improved setup.py</li>
+<li>Deprecated functions removed from <a class="reference internal" href="api.html#module-gems.libuk" title="gems.libuk"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libuk</span></code></a>.</li>
+<li>Added <a class="reference internal" href="api.html#gems.libio.import_numpy" title="gems.libio.import_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libio.import_numpy()</span></code></a> to factilitate type conversion when importing from NumPy arrays.</li>
 </ul>
-</section>
-<section id="version-0-5">
+</div>
+<div class="section" id="version-0-5">
 <h2>Version 0.5<a class="headerlink" href="#version-0-5" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Code cleaning</p></li>
-<li><p>Added option -v for choosing the verbosity of output</p></li>
-<li><p>Added <a class="reference internal" href="api.html#gems.report.minimal_report" title="gems.report.minimal_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.minimal_report()</span></code></a> for minumum verbosity</p></li>
-<li><p>Added <a class="reference internal" href="api.html#gems.libio.load_file_spectra" title="gems.libio.load_file_spectra"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libio.load_file_spectra()</span></code></a> for loading spectrophotometric data.</p></li>
-<li><dl class="simple">
-<dt>updated <a class="reference internal" href="api.html#gems.libio.export_numpy" title="gems.libio.export_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libio.export_numpy()</span></code></a> to used <em>infodict</em> instead of the</dt><dd><p>deprecated <em>pre_plotting</em>.</p>
-</dd>
+<li>Code cleaning</li>
+<li>Added option -v for choosing the verbosity of output</li>
+<li>Added <a class="reference internal" href="api.html#gems.report.minimal_report" title="gems.report.minimal_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.minimal_report()</span></code></a> for minumum verbosity</li>
+<li>Added <a class="reference internal" href="api.html#gems.libio.load_file_spectra" title="gems.libio.load_file_spectra"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libio.load_file_spectra()</span></code></a> for loading spectrophotometric data.</li>
+<li><dl class="first docutils">
+<dt>updated <a class="reference internal" href="api.html#gems.libio.export_numpy" title="gems.libio.export_numpy"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libio.export_numpy()</span></code></a> to used <em>infodict</em> instead of the</dt>
+<dd>deprecated <em>pre_plotting</em>.</dd>
 </dl>
 </li>
-<li><dl class="simple">
-<dt><a class="reference internal" href="api.html#gems.report.report_molecule" title="gems.report.report_molecule"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.report_molecule()</span></code></a> and <a class="reference internal" href="api.html#gems.report.generate_scheme" title="gems.report.generate_scheme"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.generate_scheme()</span></code></a></dt><dd><p>moved to <a class="reference internal" href="api.html#module-gems.report" title="gems.report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.report</span></code></a>.</p>
-</dd>
+<li><dl class="first docutils">
+<dt><a class="reference internal" href="api.html#gems.report.report_molecule" title="gems.report.report_molecule"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.report_molecule()</span></code></a> and <a class="reference internal" href="api.html#gems.report.generate_scheme" title="gems.report.generate_scheme"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.report.generate_scheme()</span></code></a></dt>
+<dd>moved to <a class="reference internal" href="api.html#module-gems.report" title="gems.report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.report</span></code></a>.</dd>
 </dl>
 </li>
-<li><p>Major internal rewriting of <a class="reference internal" href="api.html#module-gems.plotter" title="gems.plotter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.plotter</span></code></a> and <a class="reference internal" href="api.html#module-gems.fit" title="gems.fit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.fit</span></code></a></p></li>
-<li><p>Some functions are deprecated</p></li>
-<li><p>Main script renaming from <em>gems.py</em> to <em>rungems.py</em></p></li>
-<li><p>Submodule <em>gems.run</em> renamed <em>gems.report</em></p></li>
-<li><p>Major reorganisation of <em>src</em> folder into module <em>gems</em> and script <em>gems.py</em></p></li>
+<li>Major internal rewriting of <a class="reference internal" href="api.html#module-gems.plotter" title="gems.plotter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.plotter</span></code></a> and <a class="reference internal" href="api.html#module-gems.fit" title="gems.fit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.fit</span></code></a></li>
+<li>Some functions are deprecated</li>
+<li>Main script renaming from <em>gems.py</em> to <em>rungems.py</em></li>
+<li>Submodule <em>gems.run</em> renamed <em>gems.report</em></li>
+<li>Major reorganisation of <em>src</em> folder into module <em>gems</em> and script <em>gems.py</em></li>
 </ul>
-</section>
-<section id="version-0-4">
+</div>
+<div class="section" id="version-0-4">
 <h2>Version 0.4<a class="headerlink" href="#version-0-4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Added plot <code class="xref py py-func docutils literal notranslate"><span class="pre">gems.plot_energies()</span></code>.</p></li>
-<li><p>Added Maxima Analysis</p></li>
-<li><p>Removed unnecesary lstsq calls for calculating B-matrix</p></li>
-<li><p>Added GUI with Tkinter. Created <code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.gui</span></code></p></li>
-<li><p>moved some functions to <a class="reference internal" href="api.html#module-gems.fit" title="gems.fit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.fit</span></code></a> and <a class="reference internal" href="api.html#module-gems.libio" title="gems.libio"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libio</span></code></a></p></li>
-<li><p>Many long functions split in more comprehensive chunks.</p></li>
-<li><p>Added help menu</p></li>
-<li><p>Added save input and output</p></li>
-<li><p>Added command line option ‘-w’ for saving data as numpy array.</p></li>
+<li>Added plot <code class="xref py py-func docutils literal notranslate"><span class="pre">gems.plot_energies()</span></code>.</li>
+<li>Added Maxima Analysis</li>
+<li>Removed unnecesary lstsq calls for calculating B-matrix</li>
+<li>Added GUI with Tkinter. Created <code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.gui</span></code></li>
+<li>moved some functions to <a class="reference internal" href="api.html#module-gems.fit" title="gems.fit"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.fit</span></code></a> and <a class="reference internal" href="api.html#module-gems.libio" title="gems.libio"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libio</span></code></a></li>
+<li>Many long functions split in more comprehensive chunks.</li>
+<li>Added help menu</li>
+<li>Added save input and output</li>
+<li>Added command line option ‘-w’ for saving data as numpy array.</li>
 </ul>
-</section>
-<section id="version-0-3">
+</div>
+<div class="section" id="version-0-3">
 <h2>Version 0.3<a class="headerlink" href="#version-0-3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Added auxiliary function <a class="reference internal" href="api.html#gems.libuk.num_prot_centres" title="gems.libuk.num_prot_centres"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.num_prot_centres()</span></code></a></p></li>
-<li><p>Improved <code class="xref py py-func docutils literal notranslate"><span class="pre">libuk.error_macro_constants()</span></code>, <a class="reference internal" href="api.html#gems.libuk.macro_constants" title="gems.libuk.macro_constants"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.macro_constants()</span></code></a> and <a class="reference internal" href="api.html#gems.libuk.conditional_probability2" title="gems.libuk.conditional_probability2"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.conditional_probability2()</span></code></a>.</p></li>
+<li>Added auxiliary function <a class="reference internal" href="api.html#gems.libuk.num_prot_centres" title="gems.libuk.num_prot_centres"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.num_prot_centres()</span></code></a></li>
+<li>Improved <code class="xref py py-func docutils literal notranslate"><span class="pre">libuk.error_macro_constants()</span></code>, <a class="reference internal" href="api.html#gems.libuk.macro_constants" title="gems.libuk.macro_constants"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.macro_constants()</span></code></a> and <a class="reference internal" href="api.html#gems.libuk.conditional_probability2" title="gems.libuk.conditional_probability2"><code class="xref py py-func docutils literal notranslate"><span class="pre">gems.libuk.conditional_probability2()</span></code></a>.</li>
 </ul>
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -131,15 +129,17 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -148,8 +148,8 @@
       &copy;2019, Salvador Blasco.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="_sources/changelog.rst.txt"

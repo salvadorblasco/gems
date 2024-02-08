@@ -1,24 +1,25 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>GEMS Documentation &#8212; gems 0.5 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorials" href="tutorial.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -28,40 +29,38 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
-  <section id="gems-documentation">
+  <div class="section" id="gems-documentation">
 <h1>GEMS Documentation<a class="headerlink" href="#gems-documentation" title="Permalink to this headline">¶</a></h1>
 <p><strong class="program">GEMS</strong> is the <strong>GE</strong>neral  <strong>M</strong>icrospeciation <strong>S</strong>olver. It is aimed at solving
 acid-base microspeciation equilibria from NMR and spectroscopic data. It is</p>
 <ul class="simple">
-<li><p>Open Source</p></li>
-<li><p>Multiplatform</p></li>
-<li><p>Free</p></li>
-<li><p>Fast</p></li>
+<li>Open Source</li>
+<li>Multiplatform</li>
+<li>Free</li>
+<li>Fast</li>
 </ul>
-<section id="installing-and-running-gems">
+<div class="section" id="installing-and-running-gems">
 <h2>Installing and Running GEMS<a class="headerlink" href="#installing-and-running-gems" title="Permalink to this headline">¶</a></h2>
-<section id="installing">
+<div class="section" id="installing">
 <h3>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h3>
 <p><strong class="program">GEMS</strong> is a python script which needs numpy and scipy to run. Optionally you can
 have matplotlib for graphs.</p>
 <p>You will need</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://www.python.org/">python 3</a></p></li>
-<li><p><a class="reference external" href="http://www.numpy.org/">numpy</a></p></li>
-<li><p><a class="reference external" href="http://www.scipy.org/">scipy</a></p></li>
-<li><p>Optionally <a class="reference external" href="http://www.matplotlib.org/">matplotlib</a></p></li>
+<li><a class="reference external" href="http://www.python.org/">python 3</a></li>
+<li><a class="reference external" href="http://www.numpy.org/">numpy</a></li>
+<li><a class="reference external" href="http://www.scipy.org/">scipy</a></li>
+<li>Optionally <a class="reference external" href="http://www.matplotlib.org/">matplotlib</a></li>
 </ul>
-</section>
-<section id="first-run">
+</div>
+<div class="section" id="first-run">
 <h3>First run<a class="headerlink" href="#first-run" title="Permalink to this headline">¶</a></h3>
 <p>If you execute the command <strong class="command">gems.py -h</strong> the usage text will show</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">gems</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="n">MOLECULE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">f</span> <span class="n">FILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">ORDER</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">w</span> <span class="n">FILE</span><span class="p">]</span>
 
-<span class="n">GEMS</span><span class="p">:</span> <span class="n">The</span> <span class="n">GEneral</span> <span class="n">Microspeciation</span> <span class="n">Solver</span> <span class="n">v0</span><span class="mf">.5</span>
+<span class="n">GEMS</span><span class="p">:</span> <span class="n">The</span> <span class="n">GEneral</span> <span class="n">Microspeciation</span> <span class="n">Solver</span> <span class="n">v0</span><span class="o">.</span><span class="mi">5</span>
 
 <span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
   <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
@@ -75,91 +74,109 @@ have matplotlib for graphs.</p>
                         <span class="n">write</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">numpy</span> <span class="n">array</span> <span class="k">for</span> <span class="n">later</span> <span class="n">use</span>
 </pre></div>
 </div>
-</section>
-<section id="fitting-nmr-data">
+</div>
+<div class="section" id="fitting-nmr-data">
 <h3>Fitting NMR data<a class="headerlink" href="#fitting-nmr-data" title="Permalink to this headline">¶</a></h3>
 <p>When run with the <strong>-f FILE</strong> option, the contents of the file <strong>FILE</strong> is loaded
 and fed into the program and fitted. The contents should conform to the format
 specified in <a class="reference internal" href="#data-file-format"><span class="std std-ref">Data File Format</span></a>.</p>
-</section>
-</section>
-<section id="data-file-format">
+</div>
+</div>
+<div class="section" id="data-file-format">
 <span id="id1"></span><h2>Data File Format<a class="headerlink" href="#data-file-format" title="Permalink to this headline">¶</a></h2>
 <p>GEMS can load text files containing data in the following format:</p>
 <ul class="simple">
-<li><p>LINE1: A title. This line is an identifier. It is ignored.</p></li>
-<li><p>LINE2: The symmetry of the molecule.</p></li>
-<li><p>LINE3: List of numbers that will be used as initial values for iteration.</p></li>
-<li><p>LINE4: A list of space-separated labels of each one of the nuclei</p></li>
-<li><dl class="simple">
-<dt>LINE5 to the end: The pH (or pD) value of this point followed by the NMR shift</dt><dd><p>of each one of the nuclei. If some data is missing, those numbers can be
-replaced with an <strong>X</strong>.</p>
-</dd>
+<li>LINE1: A title. This line is an identifier. It is ignored.</li>
+<li>LINE2: The symmetry of the molecule.</li>
+<li>LINE3: List of numbers that will be used as initial values for iteration.</li>
+<li>LINE4: A list of space-separated labels of each one of the nuclei</li>
+<li><dl class="first docutils">
+<dt>LINE5 to the end: The pH (or pD) value of this point followed by the NMR shift</dt>
+<dd>of each one of the nuclei. If some data is missing, those numbers can be
+replaced with an <strong>X</strong>.</dd>
 </dl>
 </li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">Input File Example</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">Title</span> <span class="n">example</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">ignored</span><span class="o">.</span>
-<span class="linenos"> 2</span><span class="n">A2B</span>
-<span class="linenos"> 3</span><span class="mf">10.4</span> <span class="mf">3.0</span> <span class="mf">1.0</span>
-<span class="linenos"> 4</span>       <span class="n">Cpy2</span>     <span class="n">Cpy3</span>     <span class="n">Cpy4</span>     <span class="n">C1</span>      <span class="n">C2</span>      <span class="n">C3</span>      <span class="n">Hpy3</span>   <span class="n">Hpy4</span>   <span class="n">H1</span>     <span class="n">H2</span>      <span class="n">H3</span>
-<span class="linenos"> 5</span> <span class="mf">0.10</span>  <span class="mf">143.606</span>  <span class="mf">127.528</span>  <span class="mf">153.092</span>  <span class="mf">45.773</span>  <span class="mf">52.189</span>  <span class="mf">45.773</span>  <span class="mf">7.637</span>  <span class="mf">8.079</span>  <span class="mf">4.739</span>  <span class="mf">3.700</span>  <span class="mf">3.700</span>
-<span class="linenos"> 6</span> <span class="mf">1.05</span>  <span class="mf">143.515</span>  <span class="mf">127.284</span>  <span class="mf">152.999</span>  <span class="mf">46.436</span>  <span class="mf">52.319</span>  <span class="mf">46.036</span>  <span class="mf">7.617</span>  <span class="mf">8.067</span>  <span class="mf">4.712</span>  <span class="mf">3.604</span>  <span class="mf">3.583</span>
-<span class="linenos"> 7</span> <span class="mf">1.80</span>  <span class="mf">143.082</span>  <span class="mf">126.317</span>  <span class="mf">152.628</span>  <span class="mf">48.273</span>  <span class="mf">52.182</span>  <span class="mf">46.752</span>  <span class="mf">7.543</span>  <span class="mf">8.018</span>  <span class="mf">4.663</span>  <span class="mf">3.383</span>  <span class="mf">3.248</span>
-<span class="linenos"> 8</span> <span class="mf">2.82</span>  <span class="mf">142.649</span>  <span class="mf">125.390</span>  <span class="mf">152.261</span>  <span class="mf">50.045</span>  <span class="mf">52.234</span>  <span class="mf">47.385</span>  <span class="mf">7.474</span>  <span class="mf">7.974</span>  <span class="mf">4.625</span>  <span class="mf">3.180</span>  <span class="mf">2.958</span>
-<span class="linenos"> 9</span> <span class="mf">4.01</span>  <span class="mf">142.563</span>  <span class="mf">125.209</span>  <span class="mf">152.190</span>  <span class="mf">50.379</span>  <span class="mf">52.237</span>  <span class="mf">47.499</span>  <span class="mf">7.463</span>  <span class="mf">7.966</span>  <span class="mf">4.618</span>  <span class="mf">3.141</span>  <span class="mf">2.905</span>
-<span class="linenos">10</span> <span class="mf">4.89</span>  <span class="mf">142.528</span>  <span class="mf">125.167</span>  <span class="mf">152.158</span>  <span class="mf">50.368</span>  <span class="mf">52.207</span>  <span class="mf">47.477</span>  <span class="mf">7.468</span>  <span class="mf">7.971</span>  <span class="mf">4.624</span>  <span class="mf">3.145</span>  <span class="mf">2.911</span>
-<span class="linenos">11</span> <span class="mf">6.08</span>  <span class="mf">142.461</span>  <span class="mf">125.098</span>  <span class="mf">152.132</span>  <span class="mf">50.310</span>  <span class="mf">52.160</span>  <span class="mf">47.428</span>  <span class="mf">7.479</span>  <span class="mf">7.982</span>  <span class="mf">4.633</span>  <span class="mf">3.155</span>  <span class="mf">2.915</span>
-<span class="linenos">12</span> <span class="mf">6.58</span>  <span class="mf">142.445</span>  <span class="mf">125.077</span>  <span class="mf">152.204</span>  <span class="mf">50.289</span>  <span class="mf">52.171</span>  <span class="mf">47.432</span>  <span class="mf">7.478</span>  <span class="mf">7.981</span>  <span class="mf">4.630</span>  <span class="mf">3.156</span>  <span class="mf">2.917</span>
-<span class="linenos">13</span> <span class="mf">7.02</span>  <span class="mf">142.425</span>  <span class="mf">125.046</span>  <span class="mf">152.390</span>  <span class="mf">50.253</span>  <span class="mf">52.215</span>  <span class="mf">47.459</span>  <span class="mf">7.473</span>  <span class="mf">7.977</span>  <span class="mf">4.622</span>  <span class="mf">3.155</span>  <span class="mf">2.916</span>
-<span class="linenos">14</span> <span class="mf">7.44</span>  <span class="mf">142.373</span>  <span class="mf">124.977</span>  <span class="mf">152.727</span>  <span class="mf">50.186</span>  <span class="mf">52.298</span>  <span class="mf">47.508</span>  <span class="mf">7.465</span>  <span class="mf">7.970</span>  <span class="mf">4.604</span>  <span class="mf">3.152</span>  <span class="mf">2.915</span>
-<span class="linenos">15</span> <span class="mf">7.81</span>  <span class="mf">142.304</span>  <span class="mf">124.873</span>  <span class="mf">153.342</span>  <span class="mf">50.076</span>  <span class="mf">52.449</span>  <span class="mf">47.600</span>  <span class="mf">7.447</span>  <span class="mf">7.955</span>  <span class="mf">4.570</span>  <span class="mf">3.145</span>  <span class="mf">2.910</span>
-<span class="linenos">16</span> <span class="mf">8.28</span>  <span class="mf">142.129</span>  <span class="mf">124.615</span>  <span class="mf">154.880</span>  <span class="mf">49.804</span>  <span class="mf">52.813</span>  <span class="mf">47.825</span>  <span class="mf">7.408</span>  <span class="mf">7.921</span>  <span class="mf">4.491</span>  <span class="mf">3.134</span>  <span class="mf">2.901</span>
-<span class="linenos">17</span> <span class="mf">8.81</span>  <span class="mf">141.817</span>  <span class="mf">124.167</span>  <span class="mf">157.374</span>  <span class="mf">49.346</span>  <span class="mf">53.422</span>  <span class="mf">48.199</span>  <span class="mf">7.340</span>  <span class="mf">7.862</span>  <span class="mf">4.356</span>  <span class="mf">3.113</span>  <span class="mf">2.884</span>
-<span class="linenos">18</span> <span class="mf">9.74</span>  <span class="mf">141.396</span>  <span class="mf">123.583</span>  <span class="mf">160.789</span>  <span class="mf">48.763</span>  <span class="mf">54.261</span>  <span class="mf">48.726</span>  <span class="mf">7.251</span>  <span class="mf">7.783</span>  <span class="mf">4.174</span>  <span class="mf">3.077</span>  <span class="mf">2.843</span>
-<span class="linenos">19</span><span class="mf">12.11</span>  <span class="mf">140.850</span>  <span class="mf">123.824</span>  <span class="mf">162.032</span>  <span class="mf">49.860</span>  <span class="mf">55.118</span>  <span class="mf">49.771</span>  <span class="mf">7.235</span>  <span class="mf">7.707</span>  <span class="mf">3.956</span>  <span class="mf">2.798</span>  <span class="mf">2.019</span>
+<div class="highlight-default notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">Title</span> <span class="n">example</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">ignored</span><span class="o">.</span>
+<span class="n">A2B</span>
+<span class="mf">10.4</span> <span class="mf">3.0</span> <span class="mf">1.0</span>
+       <span class="n">Cpy2</span>     <span class="n">Cpy3</span>     <span class="n">Cpy4</span>     <span class="n">C1</span>      <span class="n">C2</span>      <span class="n">C3</span>      <span class="n">Hpy3</span>   <span class="n">Hpy4</span>   <span class="n">H1</span>     <span class="n">H2</span>      <span class="n">H3</span>
+ <span class="mf">0.10</span>  <span class="mf">143.606</span>  <span class="mf">127.528</span>  <span class="mf">153.092</span>  <span class="mf">45.773</span>  <span class="mf">52.189</span>  <span class="mf">45.773</span>  <span class="mf">7.637</span>  <span class="mf">8.079</span>  <span class="mf">4.739</span>  <span class="mf">3.700</span>  <span class="mf">3.700</span>
+ <span class="mf">1.05</span>  <span class="mf">143.515</span>  <span class="mf">127.284</span>  <span class="mf">152.999</span>  <span class="mf">46.436</span>  <span class="mf">52.319</span>  <span class="mf">46.036</span>  <span class="mf">7.617</span>  <span class="mf">8.067</span>  <span class="mf">4.712</span>  <span class="mf">3.604</span>  <span class="mf">3.583</span>
+ <span class="mf">1.80</span>  <span class="mf">143.082</span>  <span class="mf">126.317</span>  <span class="mf">152.628</span>  <span class="mf">48.273</span>  <span class="mf">52.182</span>  <span class="mf">46.752</span>  <span class="mf">7.543</span>  <span class="mf">8.018</span>  <span class="mf">4.663</span>  <span class="mf">3.383</span>  <span class="mf">3.248</span>
+ <span class="mf">2.82</span>  <span class="mf">142.649</span>  <span class="mf">125.390</span>  <span class="mf">152.261</span>  <span class="mf">50.045</span>  <span class="mf">52.234</span>  <span class="mf">47.385</span>  <span class="mf">7.474</span>  <span class="mf">7.974</span>  <span class="mf">4.625</span>  <span class="mf">3.180</span>  <span class="mf">2.958</span>
+ <span class="mf">4.01</span>  <span class="mf">142.563</span>  <span class="mf">125.209</span>  <span class="mf">152.190</span>  <span class="mf">50.379</span>  <span class="mf">52.237</span>  <span class="mf">47.499</span>  <span class="mf">7.463</span>  <span class="mf">7.966</span>  <span class="mf">4.618</span>  <span class="mf">3.141</span>  <span class="mf">2.905</span>
+ <span class="mf">4.89</span>  <span class="mf">142.528</span>  <span class="mf">125.167</span>  <span class="mf">152.158</span>  <span class="mf">50.368</span>  <span class="mf">52.207</span>  <span class="mf">47.477</span>  <span class="mf">7.468</span>  <span class="mf">7.971</span>  <span class="mf">4.624</span>  <span class="mf">3.145</span>  <span class="mf">2.911</span>
+ <span class="mf">6.08</span>  <span class="mf">142.461</span>  <span class="mf">125.098</span>  <span class="mf">152.132</span>  <span class="mf">50.310</span>  <span class="mf">52.160</span>  <span class="mf">47.428</span>  <span class="mf">7.479</span>  <span class="mf">7.982</span>  <span class="mf">4.633</span>  <span class="mf">3.155</span>  <span class="mf">2.915</span>
+ <span class="mf">6.58</span>  <span class="mf">142.445</span>  <span class="mf">125.077</span>  <span class="mf">152.204</span>  <span class="mf">50.289</span>  <span class="mf">52.171</span>  <span class="mf">47.432</span>  <span class="mf">7.478</span>  <span class="mf">7.981</span>  <span class="mf">4.630</span>  <span class="mf">3.156</span>  <span class="mf">2.917</span>
+ <span class="mf">7.02</span>  <span class="mf">142.425</span>  <span class="mf">125.046</span>  <span class="mf">152.390</span>  <span class="mf">50.253</span>  <span class="mf">52.215</span>  <span class="mf">47.459</span>  <span class="mf">7.473</span>  <span class="mf">7.977</span>  <span class="mf">4.622</span>  <span class="mf">3.155</span>  <span class="mf">2.916</span>
+ <span class="mf">7.44</span>  <span class="mf">142.373</span>  <span class="mf">124.977</span>  <span class="mf">152.727</span>  <span class="mf">50.186</span>  <span class="mf">52.298</span>  <span class="mf">47.508</span>  <span class="mf">7.465</span>  <span class="mf">7.970</span>  <span class="mf">4.604</span>  <span class="mf">3.152</span>  <span class="mf">2.915</span>
+ <span class="mf">7.81</span>  <span class="mf">142.304</span>  <span class="mf">124.873</span>  <span class="mf">153.342</span>  <span class="mf">50.076</span>  <span class="mf">52.449</span>  <span class="mf">47.600</span>  <span class="mf">7.447</span>  <span class="mf">7.955</span>  <span class="mf">4.570</span>  <span class="mf">3.145</span>  <span class="mf">2.910</span>
+ <span class="mf">8.28</span>  <span class="mf">142.129</span>  <span class="mf">124.615</span>  <span class="mf">154.880</span>  <span class="mf">49.804</span>  <span class="mf">52.813</span>  <span class="mf">47.825</span>  <span class="mf">7.408</span>  <span class="mf">7.921</span>  <span class="mf">4.491</span>  <span class="mf">3.134</span>  <span class="mf">2.901</span>
+ <span class="mf">8.81</span>  <span class="mf">141.817</span>  <span class="mf">124.167</span>  <span class="mf">157.374</span>  <span class="mf">49.346</span>  <span class="mf">53.422</span>  <span class="mf">48.199</span>  <span class="mf">7.340</span>  <span class="mf">7.862</span>  <span class="mf">4.356</span>  <span class="mf">3.113</span>  <span class="mf">2.884</span>
+ <span class="mf">9.74</span>  <span class="mf">141.396</span>  <span class="mf">123.583</span>  <span class="mf">160.789</span>  <span class="mf">48.763</span>  <span class="mf">54.261</span>  <span class="mf">48.726</span>  <span class="mf">7.251</span>  <span class="mf">7.783</span>  <span class="mf">4.174</span>  <span class="mf">3.077</span>  <span class="mf">2.843</span>
+<span class="mf">12.11</span>  <span class="mf">140.850</span>  <span class="mf">123.824</span>  <span class="mf">162.032</span>  <span class="mf">49.860</span>  <span class="mf">55.118</span>  <span class="mf">49.771</span>  <span class="mf">7.235</span>  <span class="mf">7.707</span>  <span class="mf">3.956</span>  <span class="mf">2.798</span>  <span class="mf">2.019</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 </div>
 <div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="api.html#gems.libio.load_file" title="gems.libio.load_file"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libio.load_file</span></code></a></p>
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="api.html#gems.libio.load_file" title="gems.libio.load_file"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gems.libio.load_file</span></code></a></p>
 </div>
-</section>
-<section id="interpreting-the-output">
+</div>
+<div class="section" id="interpreting-the-output">
 <h2>Interpreting the output<a class="headerlink" href="#interpreting-the-output" title="Permalink to this headline">¶</a></h2>
 <p>Bear in mind that <strong class="program">GEMS</strong> is a least-squares minimisation algorithm. In order to
 have meaningful results you have to be careful with the data you feed the program
 with and analyse carefuly the output provided.</p>
 <p><strong class="program">GEMS</strong>  provided a verbose output with lots of information that will help you
 to interpret what happened inside.</p>
-<section id="refinement-result">
+<div class="section" id="refinement-result">
 <h3>Refinement result<a class="headerlink" href="#refinement-result" title="Permalink to this headline">¶</a></h3>
 <p>After the optimization ends, the refined parameters are shown with the calculated errors.
 They are displayed in order.</p>
 <p>The correlation matrix shows how the refined parameters are related to each other.
 A good model should show a low correlation between the parameters. If some
 parameters show high correlation it usually means that the model is oversized.</p>
-</section>
-<section id="microstates-and-microsteps-analysis">
+</div>
+<div class="section" id="microstates-and-microsteps-analysis">
 <h3>Microstates and Microsteps Analysis<a class="headerlink" href="#microstates-and-microsteps-analysis" title="Permalink to this headline">¶</a></h3>
 <p>For each one of the macrostates, the possible microstates are shown. For each one
 of the microstates, the refined free energy <em>F</em> with error is shown along with
 the calculated population of that microstate.</p>
-</section>
-<section id="calculated-macroconstants">
+</div>
+<div class="section" id="calculated-macroconstants">
 <h3>Calculated Macroconstants<a class="headerlink" href="#calculated-macroconstants" title="Permalink to this headline">¶</a></h3>
 <p>The macroconstants are displayed. These numbers represent the protonation
 (or deuteration) equilibria.</p>
-</section>
-</section>
-<section id="indices-and-tables">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
 <h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 <div class="toctree-wrapper compound">
 <ul>
@@ -220,12 +237,11 @@ the calculated population of that microstate.</p>
 </li>
 </ul>
 </div>
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -246,15 +262,17 @@ the calculated population of that microstate.</p>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -263,8 +281,8 @@ the calculated population of that microstate.</p>
       &copy;2019, Salvador Blasco.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
       
       |
       <a href="_sources/index.rst.txt"
