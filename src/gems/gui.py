@@ -1,7 +1,7 @@
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 # ! This file is part of the GEMS software                                      !
 # !                                                                             !
-# ! Copyright (c) 2020-2021 by Salvador Blasco <salvador.blasco@protonmail.com> !
+# ! Copyright (c) 2020-2024 by Salvador Blasco <salvador.blasco@protonmail.com> !
 # ! Licensed under MIT license (see file LICENSE)                               !
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 
@@ -17,6 +17,7 @@ import webbrowser
 import numpy as np
 from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk as NavigationToolbar
 
+from . import __version__
 import gems.libio
 import gems.plotter
 import gems.report
@@ -28,7 +29,7 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
-        master.wm_title('GEMS')
+        master.wm_title(f'GEMS {__version__}')
 
         menu = self.create_menu()
         self.master.config(menu=menu)
@@ -56,17 +57,17 @@ class Application(tk.Frame):
 
         options_menu = tk.Menu(menu)
         self.order = tk.IntVar(value=3)
-        options_menu.add_radiobutton(label="1st order", variable=self.order, value=1)
-        options_menu.add_radiobutton(label="1st+2nd order", variable=self.order, value=2)
-        options_menu.add_radiobutton(label="1st+3nt+3rd order", variable=self.order, value=3)
+        # options_menu.add_radiobutton(label="1st order", variable=self.order, value=1)
+        # options_menu.add_radiobutton(label="1st+2nd order", variable=self.order, value=2)
+        # options_menu.add_radiobutton(label="1st+3nt+3rd order", variable=self.order, value=3)
 
-        options_menu.add_separator()
+        # options_menu.add_separator()
 
         self.uvvis = tk.BooleanVar(value=False)
         self.dryrun = tk.BooleanVar(value=False)
         options_menu.add_radiobutton(label="NMR data", variable=self.uvvis, value=False)
         options_menu.add_radiobutton(label="UV-vis data", variable=self.uvvis, value=True)
-        options_menu.add_radiobutton(label="dry run", variable=self.dryrun, value=False)
+        options_menu.add_checkbutton(label="dry run", variable=self.dryrun, onvalue=True, offvalue=False)
 
         menu.add_cascade(label="Options", menu=options_menu)
 
@@ -185,7 +186,7 @@ class Application(tk.Frame):
         _save(self.text_output)
 
     def _about(self):
-        msg = "GEMS\nThe GEneral Microspeciation Solver\n(C) by Dr Salvador Blasco 2019-2021\
+        msg = "GEMS\nThe GEneral Microspeciation Solver\n(C) by Dr Salvador Blasco 2019-2024\
                <salvador.blasco@protonmail.com>"
         tk.messagebox.showinfo(master=self, title='About GEMS', message=msg)
 

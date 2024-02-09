@@ -1,6 +1,6 @@
 # GEMS Documentation
 
-GEMS is the **GE**neral
+**GEMS** is the **GE**neral
 **M**icrospeciation **S**olver. It is aimed at solving acid-base
 microspeciation equilibria from NMR and spectroscopic data. It is
 
@@ -20,7 +20,7 @@ numpy and scipy to run. Optionally you can have matplotlib for graphs.
 
 You will need
 
--   [python 3](http://www.python.org/)
+-   [python 3](http://www.python.org/) >= 3.10
 -   [numpy](http://www.numpy.org/)
 -   [scipy](http://www.scipy.org/)
 -   Optionally [matplotlib](http://www.matplotlib.org/)
@@ -28,7 +28,26 @@ You will need
 First run
 ---------
 
-If you execute the command gems.py -h the usage text will show
+If you execute the command `./rungems.py -h` the usage text will show
+
+
+    usage: rungems.py [-h] [-s MOLECULE] [-f FILE] [-d] [-p] [-o ORDER] [-u] [-v V] [-w FILE]
+    
+    GEMS: The GEneral Microspeciation Solver v0.8
+    
+    options:
+      -h, --help            show this help message and exit
+      -s MOLECULE, --symmetry MOLECULE
+                            display information on the molecule
+      -f FILE, --fit FILE   load data in file and start computation
+      -d, --dry-run         load data in file and compute but do not fit
+      -p, --plot            display window with plots
+      -o ORDER, --order ORDER
+                            order of interactions to fit
+      -u, --uvvis           the input file contains UV-vis data
+      -v V, --verbosity V   change output verbosity
+      -w FILE, --write FILE
+                            write results in numpy array for later use
 
 
 Fitting NMR data
@@ -45,6 +64,8 @@ GEMS can load text files containing data in the following format:
 
 -   LINE1: A title. This line is an identifier. It is ignored.
 
+-   LINE: $keyword arguments. Optional.
+
 -   LINE2: The symmetry of the molecule.
 
 -   LINE3: List of numbers that will be used as initial values for
@@ -60,7 +81,7 @@ GEMS can load text files containing data in the following format:
 Interpreting the output
 =======================
 
-Bear in mind that GEMS is a
+Bear in mind that **GEMS** is a
 least-squares minimisation algorithm. In order to have meaningful
 results you have to be careful with the data you feed the program with
 and analyse carefuly the output provided.

@@ -374,12 +374,14 @@ def matrix_b(macro_prob, shifts):
 
     """
     improb = np.linalg.pinv(macro_prob)
-    bmatrix = improb @ shifts
-    # if np.ma.is_masked(shifts):
-    #     # bmatrix = np.ma.dot(improb, shifts).data
-    #     bmatrix = mlstsq(macro_prob, shifts).data
-    # else:
-    #     bmatrix = np.dot(improb, shifts)
+    # bmatrix = improb @ shifts
+    if np.ma.is_masked(shifts):
+        bmatrix = np.ma.dot(improb, shifts)
+        # bmatrix = np.ma.dot(improb, shifts).data
+        # bmatrix = mlstsq(macro_prob, shifts).data
+    else:
+        bmatrix = np.dot(improb, shifts)
+        # bmatrix = improb @ shifts             # not implemented for numpy 1.21
     return bmatrix
 
 

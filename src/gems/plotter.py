@@ -204,8 +204,9 @@ def plot_energies(axes, msnames, ums_free_energy, n_protctrs, **kwargs):
     """
     for ms, energy in ums_free_energy.items():
         n = sum(ms[0])
-        # name = gems.libuk.name_microstate(molecule, ms)
         name = msnames[ms]
+        if not name:
+            name = 'ø'
         axes.annotate(name, (n, energy), xytext=(0, 10),
                       textcoords='offset points', ha='center')
         axes.hlines(energy, n-0.4, n+0.4, colors='blue', label='X')
@@ -242,7 +243,7 @@ def plot_fitting(xvalues, yvalues, xsmooth, ysmooth, distribution,
     """Plot fitting."""
 
     group_label = {label[0] for label in labels}
-    groups = dict()
+    groups = {}
     for glabel in group_label:
         lst = [n for n, lbl in enumerate(labels) if lbl[0] == glabel]
         llabels = [lbl for lbl in labels if lbl[0] == glabel]
@@ -257,30 +258,29 @@ def plot_fitting(xvalues, yvalues, xsmooth, ysmooth, distribution,
 
 
 # TODO rename this function to make it internal to the module
-def make_lines(micro_constants):
+def make_lines(microconstants):
     """Calculate where to draw the energy levels.
 
     Parameters:
         micro_constants (dict): the microconstants
     Returns:
         list: the coordinates of the lines to be drawn in the format
-            ((x1, y1), (x2, y2))
+            ((x1, x2), (y1, y2))
 
     """
-    keys = micro_constants.keys()
     lines = []
-    for ua, ub in itertools.product(keys, keys):
-        a = ua[0]
-        b = ub[0]
-        if sum(a) + 1 == sum(b):
-            diff = (abs(i-j) for i, j in zip(b, a))
-            if sum(diff) == 1:
-                mk1 = micro_constants[ua]
-                mk2 = micro_constants[ub]
-                common_keys = set(mk1.keys()) & set(mk2.keys())
-                for k in common_keys:
-                    lines.append(((1+sum(a), 1+sum(b)), (mk1[k], mk2[k])))
+    for ums, value in microconstants[((0,0,0),)].items():
+        __recursive_lines(ums, value, lines, microconstants)
     return lines
+
+
+def __recursive_lines(ums, value, lines, microconstants):
+    n1 = sum(ums[0])
+    for ums2, value2 in microconstants[ums].items():
+        lines.append(((n1, 1+n1), (value, value2)))
+        if all(ums2[0]):
+            continue
+        __recursive_lines(ums2, value2, lines, microconstants)
 
 
 # TODO rename this function to make it internal to the module
@@ -316,22 +316,13 @@ def point_microconstants(msnames, micro_constants, molecule):
     out_x = []
     out_y = []
     labels = []
-    # breakpoint()
     for ms, msteps in micro_constants.items():
-        # _root_label_ = msnames[ms]
-        # # _root_label_ = gems.libuk.name_microstate(molecule, ms)
-        # if _root_label_ == '':
-        #     _root_label_ = 'Ø'
         n = sum(ms[0]) + 1
         for mstep, mk in msteps.items():
-            react, proton, prodt = gems.libuk.reaction(ms, mstep, molecule, msnames)
-            # added = msnames[mstep].replace(_root_label_, '')
-            #new_label = _root_label_ + '+' + added
-            #if new_label in labels:
-            #    continue
-
+            react, proton, _ = gems.libuk.reaction(ms, mstep, molecule, msnames)
+            if not react:
+                react = '∅'
             out_x.append(n)
             out_y.append(mk)
-            #labels.append(new_label)
             labels.append(f"{react}+{proton}")
     return out_x, out_y, labels

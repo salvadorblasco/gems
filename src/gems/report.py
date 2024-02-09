@@ -42,7 +42,6 @@ import gems.fit
 import gems.libuk
 
 
-
 class Verbosity(enum.Enum):
     VERBOSITY_MINIMAL = enum.auto()
     VERBOSITY_REGULAR = enum.auto()
@@ -397,7 +396,7 @@ def print_microstates(infodict: dict):
     #         print('      + {:10} {:10.3f}'.format(mstep, mk))
 
 
-def print_molecule(input_molecule, molecule, connectivity, isomorphisms, keywords, **kwargs):
+def print_molecule(input_molecule, molecule, connectivity, isomorphisms, keywords={}, **kwargs):
     """Print report of a given molecule.
 
     Parameters:

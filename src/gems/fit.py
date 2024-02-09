@@ -58,8 +58,8 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
 
     print('Starting...')
 
-    # method = 'L-BFGS-B'
-    method = 'BFGS'
+    method = 'L-BFGS-B'
+    # method = 'BFGS'
     # method='Nelder-Mead'
     fobj = fobj_preparation(parameters, order, proton_activity, yvalues, weights, calc_residuals)
     chisq0 = fobj(ini_vals)
@@ -260,10 +260,10 @@ def _calc_free_energy_error(parameters):
 #     return array2, array3
 
 
-def first_term(molecule, terms):
-    """Return first term."""
-    run = sorted(set(molecule))
-    return [terms[run.index(site)] for site in molecule]
+# def first_term(molecule, terms):
+#     """Return first term."""
+#     run = sorted(set(molecule))
+#     return [terms[run.index(site)] for site in molecule]
 
 
 # DEPRECATED
@@ -335,7 +335,10 @@ def calc_residuals(free_energy, shifts, proton_activity):
     ## residual = np.dot(macro_prob, bmatrix) - shifts
     # calc_shifts = fit_shifts(macro_prob, shifts)
     matrix_b = gems.libuk.matrix_b(macro_prob, shifts)
-    calc_shifts = macro_prob @ matrix_b
+
+    # calc_shifts = macro_prob @ matrix_b           # not working for masked arrays in numpy 1.21
+    calc_shifts = np.dot(macro_prob.T, shifts)
+
     residual = calc_shifts - shifts
     # print(np.sum(residual**2))
     return residual
@@ -551,7 +554,11 @@ def _aux_postfit1(retval):
     total_params = len(x)
 
     if 'hess_inv' in result:
-        covariance = result['hess_inv']*result['fun']/total_params
+        if isinstance(result['hess_inv'], scipy.optimize._lbfgsb_py.LbfgsInvHessProduct):
+            hess_inv = result['hess_inv'].todense()
+        else:
+            hess_inv = result['hess_inv']
+        covariance = hess_inv*result['fun']/total_params
     else:
         covariance = np.zeros((total_params, total_params))
     retval['covariance'] = covariance
