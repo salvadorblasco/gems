@@ -20,15 +20,15 @@ def pairwise(iterable):
     return zip(a, b)
 
 
-def _trivial_isomorphisms(adjacency):
-    if np.all(adjacency == np.ones_like(adjacency, dtype=np.int)):
-        # retv = len(adjacency) * (adjacency,)
-        retv = len(adjacency) * (np.eye(len(adjacency), dtype=np.int),)
-    elif np.all(adjacency == np.eye(len(adjacency), dtype=np.int)):
-        retv = (adjacency, )
-    else:
-        retv = None
-    return retv
+# def _trivial_isomorphisms(adjacency):
+#     if np.all(adjacency == np.ones_like(adjacency, dtype=int)):
+#         # retv = len(adjacency) * (adjacency,)
+#         retv = len(adjacency) * (np.eye(len(adjacency), dtype=int),)
+#     elif np.all(adjacency == np.eye(len(adjacency), dtype=int)):
+#         retv = (adjacency, )
+#     else:
+#         retv = None
+#     return retv
 
 
 def _permute_labels(labels, pmatrix):
@@ -46,7 +46,7 @@ def find_isomorphisms(adjacency, labels):
         return np.all(trmatrix == adjacency), pm
 
     size = len(adjacency)
-    iterpermut = itertools.permutations(np.hsplit(np.eye(size, dtype=np.int), size), size)
+    iterpermut = itertools.permutations(np.hsplit(np.eye(size, dtype=int), size), size)
     permutation_matrices = (np.hstack(c) for c in iterpermut)
     mymap = map(aux, permutation_matrices)
     isomorphisms = [m for c, m in mymap if c]
@@ -66,7 +66,7 @@ def clasify_microstates(microstates, isomorphisms):
     
     for ms, isomorphism in itertools.product(microstates, isomorphisms):
         current_list = clasify[ms]
-        trr = tuple(np.dot(isomorphism, np.array(ms, dtype=np.int)))
+        trr = tuple(np.dot(isomorphism, np.array(ms, dtype=int)))
         if trr not in current_list:
             current_list.append(trr)
     
@@ -74,22 +74,22 @@ def clasify_microstates(microstates, isomorphisms):
 
 
 # deprecated. use libuk.generate_microstates
-def generate_microstates(m, level):
-    """
-    >>> generate_microstates(3, 1)
-    {(1, 0, 0), (0, 0, 1), (0, 1, 0)}
-    >>> generate_microstates(3, 2)
-    {(1, 0, 1), (1, 1, 0), (0, 1, 1)}
-    """
-    return set(itertools.permutations(level*(1,)+(m-level)*(0,), m)) 
+# def generate_microstates(m, level):
+#     """
+#     >>> generate_microstates(3, 1)
+#     {(1, 0, 0), (0, 0, 1), (0, 1, 0)}
+#     >>> generate_microstates(3, 2)
+#     {(1, 0, 1), (1, 1, 0), (0, 1, 1)}
+#     """
+#     return set(itertools.permutations(level*(1,)+(m-level)*(0,), m)) 
 
 
 def subeye(size, mult):
     assert isinstance(mult, int), mult
     if mult == 1:
-        retv = np.eye(size, dtype=np.int)
+        retv = np.eye(size, dtype=int)
     else:
-        aux1 = np.hsplit(np.eye(size, dtype=np.int), size)
+        aux1 = np.hsplit(np.eye(size, dtype=int), size)
         aux2 = list(itertools.chain(tuple(itertools.repeat(b, mult)) for b in aux1))
         retv = np.hstack(list(itertools.chain.from_iterable(x for x in aux2)))
     return retv
