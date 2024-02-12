@@ -257,8 +257,7 @@ def plot_fitting(xvalues, yvalues, xsmooth, ysmooth, distribution,
         groups[glabel] = lst
 
 
-# TODO rename this function to make it internal to the module
-def make_lines(microconstants):
+def make_lines(microconstants: dict):
     """Calculate where to draw the energy levels.
 
     Parameters:
@@ -268,8 +267,10 @@ def make_lines(microconstants):
             ((x1, x2), (y1, y2))
 
     """
+    size = gems.libuk.num_prot_centres2(microconstants)
+    root = (0,) * size,
     lines = []
-    for ums, value in microconstants[((0,0,0),)].items():
+    for ums, value in microconstants[root].items():
         __recursive_lines(ums, value, lines, microconstants)
     return lines
 

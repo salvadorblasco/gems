@@ -335,10 +335,8 @@ def calc_residuals(free_energy, shifts, proton_activity):
     ## residual = np.dot(macro_prob, bmatrix) - shifts
     # calc_shifts = fit_shifts(macro_prob, shifts)
     matrix_b = gems.libuk.matrix_b(macro_prob, shifts)
-
-    # calc_shifts = macro_prob @ matrix_b           # not working for masked arrays in numpy 1.21
-    calc_shifts = np.dot(macro_prob.T, shifts)
-
+    # calc_shifts = macro_prob @ matrix_b
+    calc_shifts = np.dot(macro_prob, matrix_b)
     residual = calc_shifts - shifts
     # print(np.sum(residual**2))
     return residual

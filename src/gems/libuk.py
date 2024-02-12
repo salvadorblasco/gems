@@ -53,12 +53,11 @@ Terms calculations
 import itertools
 from itertools import product as iprod
 import collections
-# from collections import Counter
 import functools
 import math
 from math import exp
-# from math import factorial as fac
 import re
+import typing
 
 import numpy as np
 from numpy.linalg import lstsq
@@ -219,9 +218,11 @@ def kdeflation(n):
     for i in range(1, n+1):
         yield ratiocomb(n, i) / ratiocomb(n, 1)
 
+
 # ----------------------
 #   Terms calculations
 # ----------------------
+
 
 def avg_prtdeg(msprob):
     r"""Calculate the average protonation degree.
@@ -319,7 +320,6 @@ def error_macro_constants(free_enrg, error_freenrgy):
 
     """
     # eq (9)
-    # from math import exp
     n_protcentr = num_prot_centres(free_enrg)
     return [sum(exp(-2*energy) * error_freenrgy[s]
                 for s, energy in free_enrg.items()
@@ -375,13 +375,14 @@ def matrix_b(macro_prob, shifts):
     """
     improb = np.linalg.pinv(macro_prob)
     # bmatrix = improb @ shifts
-    if np.ma.is_masked(shifts):
-        bmatrix = np.ma.dot(improb, shifts)
-        # bmatrix = np.ma.dot(improb, shifts).data
-        # bmatrix = mlstsq(macro_prob, shifts).data
-    else:
-        bmatrix = np.dot(improb, shifts)
-        # bmatrix = improb @ shifts             # not implemented for numpy 1.21
+    bmatrix = np.dot(improb, shifts)
+    # if np.ma.is_masked(shifts):
+    #     bmatrix = np.ma.dot(improb, shifts)
+    #     # bmatrix = np.ma.dot(improb, shifts).data
+    #     # bmatrix = mlstsq(macro_prob, shifts).data
+    # else:
+    #     bmatrix = np.dot(improb, shifts)
+    #     # bmatrix = improb @ shifts             # not implemented for numpy 1.21
     return bmatrix
 
 
@@ -389,7 +390,7 @@ def micro_constant(microstep1, microstep2, free_energy):
     """Calculate the micro-equilibrium constant for two microstates.
 
     Given the free energy between two states, calculate
-    .. math:: \exp(-\beta(F_2-F_1))
+    .. math:: \\exp(-\\beta(F_2-F_1))
     """
     f1 = free_energy[microstep1]
     f2 = free_energy[microstep2]
@@ -456,36 +457,35 @@ def macrostate_probability(macro_consts: np.ndarray, proton_activity: np.ndarray
     return p / norm[:, None]
 
 
-def merge_equivalent_microstates(mapping: dict, property_: dict, function: callable) -> dict:
+def merge_equivalent_microstates(mapping: dict, property_: dict, function: typing.Callable) -> dict:
     return {ums: functools.reduce(function, (property_[ms] for ms in ums))
             for ums in set(mapping.values())}
 
 
 # DEPRECATED
-def microstate_population(conditional_probability, molecule):
-    """Calculate the population for each microstate.
-
-    The population for each microstate is basically computed in the
-    :ref:`def_conditional_probability` variable. However, some microstates
-    are equivalent. This routine sums all equivalent microstates together and
-    returns a more sensible result.
-
-    Parameters:
-        conditional_probability (dict): the :ref:`def_conditional_probability`.
-        molecule (str): A string representing the :ref:`def_molecule_symmetry`.
-    Returns:
-        dict: the microstate population.
-
-    """
-    chain_ = itertools.chain.from_iterable
-    names = set(chain_(name_terms(molecule, i) for i in range(len(molecule)+1)))
-
-    pop = {name: sum(conditional_probability[ms]
-                     for ms in conditional_probability
-                     if name_microstate(molecule, ms) == name)
-           for name in names}
-
-    return pop
+# def microstate_population(conditional_probability, molecule):
+#     """Calculate the population for each microstate.
+# 
+#     The population for each microstate is basically computed in the
+#     :ref:`def_conditional_probability` variable. However, some microstates
+#     are equivalent. This routine sums all equivalent microstates together and
+#     returns a more sensible result.
+# 
+#     Parameters:
+#         conditional_probability (dict): the :ref:`def_conditional_probability`.
+#         molecule (str): A string representing the :ref:`def_molecule_symmetry`.
+#     Returns:
+#         dict: the microstate population.
+# 
+#     """
+#     chain_ = itertools.chain.from_iterable
+#     names = set(chain_(name_terms(molecule, i) for i in range(len(molecule)+1)))
+# 
+#     pop = {name: sum(conditional_probability[ms]
+#                      for ms in conditional_probability
+#                      if name_microstate(molecule, ms) == name)
+#            for name in names}
+#     return pop
 
 
 def microstate_probability(free_energy: dict, ah: np.ndarray) -> dict:
@@ -550,7 +550,20 @@ def num_prot_centres(data: dict) -> int:
         int: the number of protonation centres.
 
     """
-    return len(tuple(data)[0])
+    return len(tuple(data.keys())[0])
+
+
+def num_prot_centres2(data: dict) -> int:
+    """Compute the number of protonation centres based on dict of data.
+
+    Parameters:
+        data (:class:`dict`): any type of data where the keys are a tuple
+            of tuples of of zeros and nones indicating the unique microstate.
+    Returns:
+        int: the number of protonation centres.
+
+    """
+    return len(tuple(data.keys())[0][0])
 
 
 # DEPRECATED FUNCTIONS AND JUNK
