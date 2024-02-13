@@ -35,7 +35,7 @@ def _permute_labels(labels, pmatrix):
     return "".join(labels[j] for j in pmatrix.nonzero()[-1])
 
 
-def find_isomorphisms(adjacency, labels):
+def find_isomorphisms(adjacency: np.ndarray, labels: str):
     """Given an adjacency matrix, find all isomorphisms by brute force.
     """
     def aux(pm):
@@ -54,10 +54,10 @@ def find_isomorphisms(adjacency, labels):
 
 
 def clasify_microstates(microstates, isomorphisms):
-    """
-    >>> isomorphisms = [array([[1, 0, 0],
-    ...                        [0, 0, 1],
-    ...                        [0, 1, 0]])]
+    """Group together the microstates that are equivalent.
+    >>> isomorphisms = [np.array([[1, 0, 0],
+    ...                           [0, 0, 1],
+    ...                           [0, 1, 0]], dtype=int)]
     >>> microstates = {(1, 0, 0), (0, 0, 1), (0, 1, 0)}
     >>> clasify_microstates(microstates, isomorphisms)
     {((0, 1, 1),), ((1, 0, 1), (1, 1, 0))}
@@ -70,7 +70,7 @@ def clasify_microstates(microstates, isomorphisms):
         if trr not in current_list:
             current_list.append(trr)
     
-    return {tuple(sorted(_)) for _ in clasify.values()}
+    return {frozenset(_) for _ in clasify.values()}
 
 
 # deprecated. use libuk.generate_microstates
@@ -84,19 +84,20 @@ def clasify_microstates(microstates, isomorphisms):
 #     return set(itertools.permutations(level*(1,)+(m-level)*(0,), m)) 
 
 
-def subeye(size, mult):
-    assert isinstance(mult, int), mult
-    if mult == 1:
-        retv = np.eye(size, dtype=int)
-    else:
-        aux1 = np.hsplit(np.eye(size, dtype=int), size)
-        aux2 = list(itertools.chain(tuple(itertools.repeat(b, mult)) for b in aux1))
-        retv = np.hstack(list(itertools.chain.from_iterable(x for x in aux2)))
-    return retv
+# def subeye(size, mult):
+#     assert isinstance(mult, int), mult
+#     if mult == 1:
+#         retv = np.eye(size, dtype=int)
+#     else:
+#         aux1 = np.hsplit(np.eye(size, dtype=int), size)
+#         aux2 = list(itertools.chain(tuple(itertools.repeat(b, mult)) for b in aux1))
+#         retv = np.hstack(list(itertools.chain.from_iterable(x for x in aux2)))
+#     return retv
 
 
-def expand_name(input_name):
-    return re.sub(r'(\w)(\d+)', lambda x: x.group(1)*int(x.group(2)), input_name)
+# deprecated use libuk.expand_name
+# def expand_name(input_name):
+#     return re.sub(r'(\w)(\d+)', lambda x: x.group(1)*int(x.group(2)), input_name)
 
 
 # # DELETE

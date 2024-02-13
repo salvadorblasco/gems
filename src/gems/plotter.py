@@ -203,7 +203,8 @@ def plot_energies(axes, msnames, ums_free_energy, n_protctrs, **kwargs):
     """Plot energies.
     """
     for ms, energy in ums_free_energy.items():
-        n = sum(ms[0])
+        # n = sum(ms[0])
+        n = gems.libuk.ums_level(ms)
         name = msnames[ms]
         if not name:
             name = 'ø'
@@ -268,7 +269,8 @@ def make_lines(microconstants: dict):
 
     """
     size = gems.libuk.num_prot_centres2(microconstants)
-    root = (0,) * size,
+    # root = (0,) * size,
+    root = frozenset(((0,) * size,))
     lines = []
     for ums, value in microconstants[root].items():
         __recursive_lines(ums, value, lines, microconstants)
@@ -276,10 +278,11 @@ def make_lines(microconstants: dict):
 
 
 def __recursive_lines(ums, value, lines, microconstants):
-    n1 = sum(ums[0])
+    #n1 = sum(ums[0])
+    n1 = gems.libuk.ums_level(ums)
     for ums2, value2 in microconstants[ums].items():
         lines.append(((n1, 1+n1), (value, value2)))
-        if all(ums2[0]):
+        if all(gems.libuk.pop_microstate(ums2)):
             continue
         __recursive_lines(ums2, value2, lines, microconstants)
 
@@ -318,7 +321,8 @@ def point_microconstants(msnames, micro_constants, molecule):
     out_y = []
     labels = []
     for ms, msteps in micro_constants.items():
-        n = sum(ms[0]) + 1
+        # n = sum(ms[0]) + 1
+        n = 1 + gems.libuk.ums_level(ms)
         for mstep, mk in msteps.items():
             react, proton, _ = gems.libuk.reaction(ms, mstep, molecule, msnames)
             if not react:

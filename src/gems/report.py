@@ -97,9 +97,10 @@ def print_parameters(infodict: dict):
         print(f"{ordn:>12}-order:")
         for ums in gems.libuk.filter_by_macro(mapping, 1+n):
             name = nms[ums]
-            val = parms.vmc(ums[0])
-            err = parms.evmc(ums[0])
-            stat = parms.microstate_status(ums[0])
+            ms0 = gems.libuk.pop_microstate(ums)
+            val = parms.vmc(ms0)
+            err = parms.evmc(ms0)
+            stat = parms.microstate_status(ms0)
             print(f'      {name:>8}:  {val:>10.4f} ± {err:.4f}  {stat}')
 
 def print_report(infodict):
@@ -369,7 +370,9 @@ def print_microstates(infodict: dict):
             if level < len(molecule):
                 for mstp in msteps[ums]:
                     # prod = nms[mstp]
-                    site = "".join(_m for _m, _a, _b in  zip(molecule, mstp[0], ums[0]) if _a != _b)
+                    ms0 = gems.libuk.pop_microstate(ums)
+                    mstp0 = gems.libuk.pop_microstate(mstp)
+                    site = "".join(_m for _m, _a, _b in  zip(molecule, mstp0, ms0) if _a != _b)
                     #muk = gems.libuk.micro_constant(ums, mstp, ums_free)
                     muk = microconstants[ums][mstp]
                     print(f'      + {site:10} {muk:10.3f}')

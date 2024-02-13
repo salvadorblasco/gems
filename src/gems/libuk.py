@@ -140,7 +140,8 @@ def expand_name(input_name):
 def name_equivalent_microstates(molecule: str, mapping: dict) -> dict:
     tt = []
     for v in set(mapping.values()):
-        n = "".join(sorted(l for l, i in zip(molecule, v[0]) if i))
+        v0 = pop_microstate(v)
+        n = "".join(sorted(l for l, i in zip(molecule, v0) if i))
         m = min(sum(a*2**q for q, a in enumerate(b)) for b in v)
         tt.append((n, m, v))
 
@@ -154,6 +155,10 @@ def name_equivalent_microstates(molecule: str, mapping: dict) -> dict:
     return retv
 
 
+def pop_microstate(ums: frozenset):
+    return list(ums).pop()
+
+
 def reaction(ums1: tuple, ums2: tuple, molecule: str, msnames: dict):
     # breakpoint()
     react = msnames[ums1]
@@ -162,6 +167,11 @@ def reaction(ums1: tuple, ums2: tuple, molecule: str, msnames: dict):
     for l in react:
         proton.remove(l)
     return react, "".join(proton), prodt
+
+
+def ums_level(ums):
+    ms = pop_microstate(ums)
+    return sum(ms)
 
 
 # ------------------------------------------------
@@ -174,7 +184,7 @@ def compute_multiplicity(mapping):
 
 
 def filter_by_macro(mapping, n):
-    yield from (i for i in set(mapping.values()) if sum(i[0]) == n)
+    yield from (i for i in set(mapping.values()) if sum(pop_microstate(i)) == n)
 
 
 def generate_all_microstates(size):
@@ -563,7 +573,9 @@ def num_prot_centres2(data: dict) -> int:
         int: the number of protonation centres.
 
     """
-    return len(tuple(data.keys())[0][0])
+    ms0 = pop_microstate(tuple(data.keys())[0])
+    return len(ms0)
+    # return len(tuple(data.keys())[0][0])
 
 
 # DEPRECATED FUNCTIONS AND JUNK

@@ -31,7 +31,8 @@ class FittingParams():
         self.__prepareids()
 
     def __prepareids(self):
-        aux = {(sum(m[0]), min(sum(a*2**n for n, a in enumerate(b)) for b in m)): m
+        # TODO probably IDs are not necessary
+        aux = {(sum(gems.libuk.pop_microstate(m)), min(sum(a*2**n for n, a in enumerate(b)) for b in m)): m
                for m in set(self.mapping.values())}
         self.ids = {n:aux[k] for n, k in enumerate(sorted(aux))}
         self.revid = {aux[k]:n for n, k in enumerate(sorted(aux))}
@@ -63,7 +64,7 @@ class FittingParams():
         energy = 0.0
         LN10 = 2.3025851
         for level in range(max_level):
-            for ms in gems.isomorph.generate_microstates(self.size, 1+level):   # TODO change this function
+            for ms in gems.libuk.generate_microstates(self.size, 1+level):   # TODO change this function
                 if sum(i*j for i,j in zip(ms, microstate)) == 1+level:
                     p = fvmc(ms)
                     energy += p * mult[level]
