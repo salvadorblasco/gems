@@ -76,7 +76,7 @@ def minimal_report(infodict):
     print_parameters(infodict)
 
     if infodict['correlation'] is not None:
-        print_correlation(infodict['correlation'], infodict['molecule'])
+        print_correlation(**infodict)
     print()
 
     if 'wavelength' in infodict:
@@ -271,16 +271,16 @@ def print_bmatrix(bmatrix, labels, **kwargs):
         print(fmt.format(lbl, *b))
 
 
-def print_correlation(corr, molecule):
+def print_correlation(correlation, parameters, msnames, **kwargs):
     """Print information on the correlation matrix."""
     section('correlation')
-    name_params = [j for i in (1, 2, 3)
-                   for j in gems.libuk.name_terms(molecule, i)]
-    nparms = len(name_params)
-    if nparms > 6:
-        print_array_sorted(corr, name_params)
+    sorted_params = parameters.get_sorted_params()
+    name_params = [msnames[i] for i in sorted_params]
+    name_params[name_params.index('')] = '∅'
+    if len(name_params) > 6:
+        print_array_sorted(correlation, name_params)
     else:
-        print_array_half(corr, name_params)
+        print_array_half(correlation, name_params)
 
 
 def print_deltamatrix(dmatrix, delta_span, labels, molecule, **kwargs):

@@ -148,6 +148,14 @@ def expand_name(input_name):
 
 
 def name_equivalent_microstates(molecule: str, mapping: dict) -> dict:
+    """Give a unique name to microstates.
+
+    Parameters:
+        molecule(str): the expanded name of the molecule.
+        mapping(dict): the microstate mapping
+    Returns:
+        dict: the name mapping ums -> name
+    """
     tt = []
     for v in set(mapping.values()):
         v0 = pop_microstate(v)

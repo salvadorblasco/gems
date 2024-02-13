@@ -144,3 +144,6 @@ class FittingParams():
             microstate = self.ids[_id]
             if microstate in store:
                 store[microstate] = next(ival)
+
+    def get_sorted_params(self):
+        return (self.ids[k] for k in sorted(self.ids))
