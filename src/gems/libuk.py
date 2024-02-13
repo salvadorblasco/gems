@@ -9,45 +9,51 @@
 are loaded by :program:`GEMS` or they can be used in a standalone
 python script.
 
+Molecule and Symmetry Operations
+--------------------------------
+* :func:`compute_mapping`
+* :func:`compute_connectivity`
+* :func:`compute_isomorphisms`
+
 Microstates Nomenclature
 ------------------------
-* :func:`name_microstate`
-* :func:`name_terms`
-* :func:`expand_name`
 * :func:`compact_name`
-* :func:`molecule_info`
+* :func:`expand_name`
+* :func:`name_equivalent_microstates`
+* :func:`pop_microstate`
+* :func:`reaction`
+* :func:`ums_level`
 
 Functions for Multiplicity and Combinatory
 ------------------------------------------
-* :func:`order_terms`
-* :func:`kdeflation`
-* :func:`comb`
-* :func:`remainder`
-* :func:`generate_microstep`
-* :func:`state_microsteps`
-* :func:`total_microconsts`
-* :func:`total_microstates`
-* :func:`generate_microstate`
-* :func:`generate_all_microstates`
-* :func:`count_microstate`
-* :func:`remove_equivalent_states`
+:func:`compute_multiplicity`
+:func:`filter_by_macro`
+:func:`generate_all_microstates`
+:func:`generate_microstates`
+:func:`comb`
 
 Terms calculations
 ------------------
-* :func:`fit_free_energy`
-* :func:`microstate_probability`
-* :func:`macrostate_probability`
+* :func:`avg_prtdeg`
+* :func:`conditional_probability1`
+* :func:`conditional_probability2`
+* :func:`macro_constants`
+* :func:`microsteps`
+* :func:`error_macro_constants`
 * :func:`matrix_a`
 * :func:`matrix_b`
-* :func:`conditional_probability2`
-* :func:`conditional_probability1`
-* :func:`avg_prtdeg`
-* :func:`microstate_multiplicity`
-* :func:`micro_constants2`
+* :func:`micro_constant`
 * :func:`micro_constants`
-* :func:`error_macro_constants`
-* :func:`macro_constants`
+* :func:`macrostate_probability`
+* :func:`merge_equivalent_microstates`
+* :func:`microstate_probability`
+* :func:`mlstsq`
 * :func:`num_prot_centres`
+* :func:`num_prot_centres2`
+
+Variables used in this module
+-----------------------------
+
 """
 
 import itertools
@@ -60,6 +66,7 @@ import re
 import typing
 
 import numpy as np
+import numpy.typing as npt
 from numpy.linalg import lstsq
 import scipy.optimize
 
@@ -67,11 +74,14 @@ import gems.isomorph
 import gems.cmatrix
 
 
+NDArrayInt = npt.NDArray[np.int_]
+
+
 # ------------------------------------
 #   Molecule and Symmetry Operations
 # ------------------------------------
 
-def compute_mapping(molecule, isomorphisms):
+def compute_mapping(molecule: str, isomorphisms: typing.List[NDArrayInt]) -> dict:
     size = len(molecule)
     mapping = {}
     for level in range(1+size):
@@ -81,11 +91,11 @@ def compute_mapping(molecule, isomorphisms):
     return mapping
 
 
-def compute_connectivity(molecule):
+def compute_connectivity(molecule: str):
     return gems.cmatrix.connectivity_matrix(molecule)
 
 
-def compute_isomorphisms(molecule, connectivity):
+def compute_isomorphisms(molecule: str, connectivity: NDArrayInt):
     return gems.isomorph.find_isomorphisms(connectivity, molecule)
 
 
@@ -109,8 +119,8 @@ def compact_name(input_name):
         :func:`expand_name`
 
     """
-    c = collections.Counter(input_name)
-    return "".join(l + str(n) if n > 1 else l for l, n in c.items())
+    count = collections.Counter(input_name)
+    return "".join(l + str(n) if n > 1 else l for l, n in count.items())
 
 
 def expand_name(input_name):
@@ -191,7 +201,7 @@ def generate_all_microstates(size):
     yield from iprod((0, 1), repeat=size)
 
 
-def generate_microstates(m, level):
+def generate_microstates(m: int, level: int):
     """
     >>> generate_microstates(3, 1)
     {(1, 0, 0), (0, 0, 1), (0, 1, 0)}
@@ -468,6 +478,8 @@ def macrostate_probability(macro_consts: np.ndarray, proton_activity: np.ndarray
 
 
 def merge_equivalent_microstates(mapping: dict, property_: dict, function: typing.Callable) -> dict:
+    """Translate individual microstates keys to unique microstates.
+    """
     return {ums: functools.reduce(function, (property_[ms] for ms in ums))
             for ums in set(mapping.values())}
 
@@ -727,25 +739,25 @@ def num_prot_centres2(data: dict) -> int:
 
 
 # DEPRECATED
-def name_terms(molecule, level):
-    """Name the terms of the molecule at a given level.
-
-    Parameters:
-        molecule (str): A string representing the :ref:`def_molecule_symmetry`.
-        level (int): the level (1, 2, or 3) of the parameters
-    Returns:
-        list: the sorted names of the terms
-    Example:
-        >>> name_terms('AABC', 1)
-        ['A', 'B', 'C']
-        >>> name_terms('AABC', 2)
-        ['AA', 'AB', 'AC', 'BC']
-        >>> name_terms('AABC', 3)
-        ['AAB', 'AAC', 'ABC']
-
-    """
-    cmb = itertools.combinations(molecule, level)
-    return sorted(set(("".join(q) for q in cmb)))
+# def name_terms(molecule, level):
+#     """Name the terms of the molecule at a given level.
+# 
+#     Parameters:
+#         molecule (str): A string representing the :ref:`def_molecule_symmetry`.
+#         level (int): the level (1, 2, or 3) of the parameters
+#     Returns:
+#         list: the sorted names of the terms
+#     Example:
+#         >>> name_terms('AABC', 1)
+#         ['A', 'B', 'C']
+#         >>> name_terms('AABC', 2)
+#         ['AA', 'AB', 'AC', 'BC']
+#         >>> name_terms('AABC', 3)
+#         ['AAB', 'AAC', 'ABC']
+# 
+#     """
+#     cmb = itertools.combinations(molecule, level)
+#     return sorted(set(("".join(q) for q in cmb)))
 
 
 # DEPRECATED

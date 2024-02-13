@@ -95,7 +95,6 @@ class TestLibUk(unittest.TestCase):
                               (0, 1, 1): -45.0, (1, 1, 1): -60.0}
 
     def test_2_equal(self):
-
         def two_equal(seq):
             import collections
             count = collections.Counter(seq)
@@ -128,11 +127,31 @@ class TestLibUk(unittest.TestCase):
         reslt2 = np.array([[0.33333323], [0.33333323], [0.33333333]])
         np.testing.assert_array_almost_equal(reslt1, reslt2)
 
+    def test_compact_name(self):
+        import gems.libuk
+        molecules = (('A', 'A'), ('AB', 'AB'), ('ABC','ABC'),
+                     ('A2B', 'AAB'), ('A2B', 'ABA'), ('A4', 'AAAA'),
+                     ('A2B2', 'AABB'), ('Z4G2T', 'ZZZZGGT'))
+
+        for mol, emol in molecules:
+            with self.subTest(mol):
+                self.assertEqual(mol, gems.libuk.compact_name(emol))
+
     @unittest.skip("broken")
     def test_compute_mapping(self):
         import gems.libuk
         test_molec = "A2B2"
         mapping = gems.libuk.compute_mapping(test_molec, isomorphisms)
+
+    def test_expand_name(self):
+        import gems.libuk
+        molecules = (('A', 'A'), ('AB', 'AB'), ('ABC','ABC'),
+                     ('A2B', 'AAB'), ('ABA', 'ABA'), ('A4', 'AAAA'),
+                     ('A2B2', 'AABB'), ('Z4G2T', 'ZZZZGGT'))
+
+        for mol, emol in molecules:
+            with self.subTest(mol):
+                self.assertEqual(gems.libuk.expand_name(mol), emol)
 
     @unittest.skip("broken")
     def test_microstate_multiplicity(self):
@@ -222,15 +241,6 @@ class TestLibUk(unittest.TestCase):
                 ('AABB', (1, 0, 1, 1), 'ABB'))
         for molec, ms, result in feed:
             retv = libuk.name_microstate(molec, ms)
-            self.assertEqual(result, retv)
-
-    def test_name_terms(self):
-        from gems import libuk
-        feed = (('AABC', 1, ['A', 'B', 'C']),
-                ('AABC', 2, ['AA', 'AB', 'AC', 'BC']),
-                ('AABC', 3, ['AAB', 'AAC', 'ABC']))
-        for molec, lvl, result in feed:
-            retv = libuk.name_terms(molec, lvl)
             self.assertEqual(result, retv)
 
     def test_error_macro_constants(self):
