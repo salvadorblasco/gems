@@ -68,6 +68,11 @@ GEMS can load text files containing data in the following format:
    :caption: Input File Example
    :linenos:
 
+Between lines 1 and 2 optional keyword arguments that modify the behaviour of the
+program can be included. The keywords currently supported are
+
+.. include:: ./keywords.rst
+
 .. seealso:: :mod:`gems.libio.load_file`
 
 Interpreting the output

@@ -1,26 +1,26 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Algorithm Details &#8212; gems 0.5 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Public GEMS API" href="api.html" />
     <link rel="prev" title="Tutorials" href="tutorial.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -30,11 +30,13 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
-  <div class="section" id="algorithm-details">
+  <section id="algorithm-details">
 <h1>Algorithm Details<a class="headerlink" href="#algorithm-details" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="microstate-nomenclature">
+<section id="microstate-nomenclature">
 <h2>Microstate Nomenclature<a class="headerlink" href="#microstate-nomenclature" title="Permalink to this headline">¶</a></h2>
 <p>A molecule with <em>N</em> protonation sites can have <em>H</em> protons
 arranged in <span class="math notranslate nohighlight">\(N \choose H\)</span> ways. The protonation
@@ -43,15 +45,15 @@ deprotonated <em>s</em><sub>j</sub> =0. Therefore, a microstate can be
 defined by a collection of binary parameters {<em>s</em><sub>j</sub>} such as
 {0, 1, 0, 0}.</p>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="api.html#microstate-definition"><span class="std std-ref">Microstate</span></a>.</p>
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="api.html#microstate-definition"><span class="std std-ref">Microstate</span></a>.</p>
 </div>
-</div>
-<div class="section" id="cluster-expansion">
+</section>
+<section id="cluster-expansion">
 <h2>Cluster Expansion<a class="headerlink" href="#cluster-expansion" title="Permalink to this headline">¶</a></h2>
 <p>The algorithm is largely based on the Cluster Expansion Method by Borkovec and
-Koper (<a class="reference internal" href="#borkovec2000" id="id1">[Borkovec2000]</a> and <a class="reference internal" href="#borkovec2002" id="id2">[Borkovec2002]</a>) that also incorporates the simplifications
-arising from the molecule symmetry from Szakács and Noszál (<a class="reference internal" href="#szakacs1999" id="id3">[Szakacs1999]</a>).
+Koper (<a class="reference internal" href="#borkovec2000" id="id1"><span>[Borkovec2000]</span></a> and <a class="reference internal" href="#borkovec2002" id="id2"><span>[Borkovec2002]</span></a>) that also incorporates the simplifications
+arising from the molecule symmetry from Szakács and Noszál (<a class="reference internal" href="#szakacs1999" id="id3"><span>[Szakacs1999]</span></a>).
 In this approach, the free energy <em>F</em> can be decomposed
 into the sum of parameters of first, second and third order.</p>
 <p>First-order parameters can be assimilated to the <em>raw</em> protonation constant of
@@ -74,167 +76,167 @@ value of the parameters approach zero as the distance increases and for
 a distance larger than two it can safely be considered zero.</p>
 <p>The total number of parameters would be</p>
 <ul class="simple">
-<li><em>n</em> first-order parameters</li>
-<li><span class="math notranslate nohighlight">\({n \choose 2} = \frac{n(n-1)}2\)</span> Second-order parameters</li>
-<li><span class="math notranslate nohighlight">\({n \choose 3} = \frac{n(n-1)(n-2)}3\)</span> Third-order parameters</li>
+<li><p><em>n</em> first-order parameters</p></li>
+<li><p><span class="math notranslate nohighlight">\({n \choose 2} = \frac{n(n-1)}2\)</span> Second-order parameters</p></li>
+<li><p><span class="math notranslate nohighlight">\({n \choose 3} = \frac{n(n-1)(n-2)}3\)</span> Third-order parameters</p></li>
 </ul>
 <p>As the system grows larger and larger, the number of microconstants grows
 exponentially as <span class="math notranslate nohighlight">\(2n^{(n-1)}\)</span>, but with the cluster expansion
 capped to third-order only experiments a polynomial growth.</p>
 <a class="reference internal image-reference" href="_images/params_growth.png"><img alt="Growth of the number of parameters" src="_images/params_growth.png" style="width: 327.0px; height: 276.0px;" /></a>
-</div>
-<div class="section" id="symmetry-simplification">
+</section>
+<section id="symmetry-simplification">
 <h2>Symmetry Simplification<a class="headerlink" href="#symmetry-simplification" title="Permalink to this headline">¶</a></h2>
 <p>Most molecules have some kind of symmetry. This means that some
 protonation centres are equivalent and, consequently, the number of
 parameters is reduced because they can be constrained to have the
 same value.</p>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="tutorial.html#info-symmetry"><span class="std std-ref">Tutorial 2: Obtaining information based on molecule symmetry</span></a></p>
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="tutorial.html#info-symmetry"><span class="std std-ref">Tutorial 2: Obtaining information based on molecule symmetry</span></a></p>
 </div>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="3%" />
-<col width="6%" />
-<col width="15%" />
-<col width="14%" />
-<col width="17%" />
-<col width="45%" />
+<col style="width: 3%" />
+<col style="width: 6%" />
+<col style="width: 15%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+<col style="width: 45%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head"><em>n</em></th>
-<th class="head">symmetry</th>
-<th class="head">without cluster expansion</th>
-<th class="head">with cluster expansion</th>
-<th class="head">with symmetry simplification</th>
-<th class="head">example</th>
+<thead>
+<tr class="row-odd"><th class="head"><p><em>n</em></p></th>
+<th class="head"><p>symmetry</p></th>
+<th class="head"><p>without cluster expansion</p></th>
+<th class="head"><p>with cluster expansion</p></th>
+<th class="head"><p>with symmetry simplification</p></th>
+<th class="head"><p>example</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>2</td>
-<td>A2</td>
-<td>3</td>
-<td>3</td>
-<td>2</td>
-<td>ethylenediamine</td>
+<tbody>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>A2</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>2</p></td>
+<td><p>ethylenediamine</p></td>
 </tr>
-<tr class="row-odd"><td>2</td>
-<td>AB</td>
-<td>3</td>
-<td>3</td>
-<td>3</td>
-<td>alanine</td>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>AB</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>alanine</p></td>
 </tr>
-<tr class="row-even"><td>3</td>
-<td>A3</td>
-<td>12</td>
-<td>7</td>
-<td>3</td>
-<td>trisaminoethylamine</td>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>A3</p></td>
+<td><p>12</p></td>
+<td><p>7</p></td>
+<td><p>3</p></td>
+<td><p>trisaminoethylamine</p></td>
 </tr>
-<tr class="row-odd"><td>3</td>
-<td>A2B</td>
-<td>12</td>
-<td>7</td>
-<td>5</td>
-<td>citrate</td>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>A2B</p></td>
+<td><p>12</p></td>
+<td><p>7</p></td>
+<td><p>5</p></td>
+<td><p>citrate</p></td>
 </tr>
-<tr class="row-even"><td>3</td>
-<td>ABC</td>
-<td>12</td>
-<td>7</td>
-<td>7</td>
-<td>inositol phosphate</td>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>ABC</p></td>
+<td><p>12</p></td>
+<td><p>7</p></td>
+<td><p>7</p></td>
+<td><p>inositol phosphate</p></td>
 </tr>
-<tr class="row-odd"><td>4</td>
-<td>A4</td>
-<td>32</td>
-<td>14</td>
-<td>3</td>
-<td>EDTA (carboxylate)</td>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>A4</p></td>
+<td><p>32</p></td>
+<td><p>14</p></td>
+<td><p>3</p></td>
+<td><p>EDTA (carboxylate)</p></td>
 </tr>
-<tr class="row-even"><td>4</td>
-<td>A3B</td>
-<td>32</td>
-<td>14</td>
-<td>6</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>A3B</p></td>
+<td><p>32</p></td>
+<td><p>14</p></td>
+<td><p>6</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>4</td>
-<td>A2B2</td>
-<td>32</td>
-<td>14</td>
-<td>7</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>A2B2</p></td>
+<td><p>32</p></td>
+<td><p>14</p></td>
+<td><p>7</p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>4</td>
-<td>A2BC</td>
-<td>32</td>
-<td>14</td>
-<td>10</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>A2BC</p></td>
+<td><p>32</p></td>
+<td><p>14</p></td>
+<td><p>10</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>4</td>
-<td>ABCD</td>
-<td>32</td>
-<td>14</td>
-<td>14</td>
-<td>trilysine (amino groups)</td>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>ABCD</p></td>
+<td><p>32</p></td>
+<td><p>14</p></td>
+<td><p>14</p></td>
+<td><p>trilysine (amino groups)</p></td>
 </tr>
-<tr class="row-even"><td>5</td>
-<td>A5</td>
-<td>80</td>
-<td>25</td>
-<td>3</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>A5</p></td>
+<td><p>80</p></td>
+<td><p>25</p></td>
+<td><p>3</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>5</td>
-<td>A4B</td>
-<td>80</td>
-<td>25</td>
-<td>6</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>A4B</p></td>
+<td><p>80</p></td>
+<td><p>25</p></td>
+<td><p>6</p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>5</td>
-<td>ABCDE</td>
-<td>80</td>
-<td>25</td>
-<td>25</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>ABCDE</p></td>
+<td><p>80</p></td>
+<td><p>25</p></td>
+<td><p>25</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>6</td>
-<td>A6</td>
-<td>192</td>
-<td>41</td>
-<td>3</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>A6</p></td>
+<td><p>192</p></td>
+<td><p>41</p></td>
+<td><p>3</p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>6</td>
-<td>A5B</td>
-<td>192</td>
-<td>41</td>
-<td>6</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>A5B</p></td>
+<td><p>192</p></td>
+<td><p>41</p></td>
+<td><p>6</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>6</td>
-<td>A4B2</td>
-<td>192</td>
-<td>41</td>
-<td>8</td>
-<td>triethylenetetraminehexa-acetate (carboxylate)</td>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>A4B2</p></td>
+<td><p>192</p></td>
+<td><p>41</p></td>
+<td><p>8</p></td>
+<td><p>triethylenetetraminehexa-acetate (carboxylate)</p></td>
 </tr>
-<tr class="row-even"><td>6</td>
-<td>ABCDEF</td>
-<td>192</td>
-<td>41</td>
-<td>41</td>
-<td>corticotropin</td>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>ABCDEF</p></td>
+<td><p>192</p></td>
+<td><p>41</p></td>
+<td><p>41</p></td>
+<td><p>corticotropin</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="theoretical-background">
+</section>
+<section id="theoretical-background">
 <h2>Theoretical Background<a class="headerlink" href="#theoretical-background" title="Permalink to this headline">¶</a></h2>
 <p>With this decomposition we can fit the free energy of the system with
 the following equation:</p>
@@ -280,43 +282,37 @@ minimized.</p>
 <p>and the <em>conditional probability</em> is</p>
 <div class="math notranslate nohighlight">
 \[\pi(\{s_i\}) = \bar{K}_n^{-1} e^{-\beta F(\{s_j\})}\]</div>
-</div>
-<div class="section" id="algorithm-implementation">
+</section>
+<section id="algorithm-implementation">
 <h2>Algorithm Implementation<a class="headerlink" href="#algorithm-implementation" title="Permalink to this headline">¶</a></h2>
 <p>The calculations are carried by SciPy in the background through the
-function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v1.6.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimize.minimize()</span></code></a>. The Minimisation
+function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v1.12.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimize.minimize()</span></code></a>. The Minimisation
 algorithm is the default one for the parameters used: the
 L-BFGS-B algorithm. In the future, other algorithms will be available.
 The objective function (see <code class="xref py py-func docutils literal notranslate"><span class="pre">fit.fobj()</span></code>) is passed and minimised.</p>
-</div>
-<div class="section" id="references">
+</section>
+<section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
-<table class="docutils citation" frame="void" id="borkovec2000" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[Borkovec2000]</a></td><td><em>A Cluster Expansion Method for the Complete Resolution of Microscopic Ionization Equilibria
-from NMR Titrations</em>, Michal Borkovec and Ger J. M. Koper, <em>Anal. Chem.</em> <strong>2000</strong>, 72, 3272-3279.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="borkovec2002" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[Borkovec2002]</a></td><td><em>Resolution of Microscopic Protonation Mechanisms in Polyprotic Molecules</em>,
-Michal Borkovec, Marcin Brynda, Ger J. M. Koper and Bernard Spiess, <em>Chimia</em> <strong>2002</strong>, 56 695–701.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="szakacs1999" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[Szakacs1999]</a></td><td><em>Protonation microequilibrium treatment of polybasic compounds with any possible symmetry</em>,
-Zoltán Szakács and Béla Noszál, <em>J. Math. Chem.</em> <strong>1999</strong>, 26, 139–155.</td></tr>
-</tbody>
-</table>
-</div>
-</div>
+<dl class="citation">
+<dt class="label" id="borkovec2000"><span class="brackets"><a class="fn-backref" href="#id1">Borkovec2000</a></span></dt>
+<dd><p><em>A Cluster Expansion Method for the Complete Resolution of Microscopic Ionization Equilibria
+from NMR Titrations</em>, Michal Borkovec and Ger J. M. Koper, <em>Anal. Chem.</em> <strong>2000</strong>, 72, 3272-3279.</p>
+</dd>
+<dt class="label" id="borkovec2002"><span class="brackets"><a class="fn-backref" href="#id2">Borkovec2002</a></span></dt>
+<dd><p><em>Resolution of Microscopic Protonation Mechanisms in Polyprotic Molecules</em>,
+Michal Borkovec, Marcin Brynda, Ger J. M. Koper and Bernard Spiess, <em>Chimia</em> <strong>2002</strong>, 56 695–701.</p>
+</dd>
+<dt class="label" id="szakacs1999"><span class="brackets"><a class="fn-backref" href="#id3">Szakacs1999</a></span></dt>
+<dd><p><em>Protonation microequilibrium treatment of polybasic compounds with any possible symmetry</em>,
+Zoltán Szakács and Béla Noszál, <em>J. Math. Chem.</em> <strong>1999</strong>, 26, 139–155.</p>
+</dd>
+</dl>
+</section>
+</section>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -346,17 +342,15 @@ Zoltán Szakács and Béla Noszál, <em>J. Math. Chem.</em> <strong>1999</strong
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -365,8 +359,8 @@ Zoltán Szakács and Béla Noszál, <em>J. Math. Chem.</em> <strong>1999</strong
       &copy;2019, Salvador Blasco.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="_sources/algorithm.rst.txt"
