@@ -276,7 +276,6 @@ def print_correlation(correlation, parameters, msnames, **kwargs):
     section('correlation')
     sorted_params = parameters.get_sorted_params()
     name_params = [msnames[i] for i in sorted_params]
-    name_params[name_params.index('')] = '∅'
     if len(name_params) > 6:
         print_array_sorted(correlation, name_params)
     else:

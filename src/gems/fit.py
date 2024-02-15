@@ -26,6 +26,7 @@ Auxiliary Functions:
 
 
 import collections
+import sys
 
 import numpy as np
 import scipy.optimize
@@ -48,7 +49,7 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
     ms_naming = gems.libuk.name_equivalent_microstates(expmolec, mapping)
     parameters = gems.vmc.FittingParams(mapping, ms_naming)
     parameters.set_values(ini_vals)
-    _apply_keywords(keywords, parameters)
+    _apply_keywords(keywords, parameters, ms_naming)
 
     proton_activity = 10**-pH
     if flag_uv:
@@ -58,17 +59,32 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
 
     print('Starting...')
 
-    method = 'L-BFGS-B'
-    # method = 'BFGS'
+    # method = 'L-BFGS-B'
+    method = 'BFGS'
     # method='Nelder-Mead'
+
+    print(f' optimize with {method}')
+    # print(parameters.get_bounds())
+    # for ums in parameters.get_sorted_params():
+    #     print(ums, ms_naming[ums])
+    # print(parameters.parameters)
+    # print(parameters.ids)
+    # sys.exit(1)
+    # _bounds = ((None, None), (None, None), (None, None), (2.0, 4.0), (None, None))
+    _bounds = parameters.get_bounds()
+
+    if _bounds is not None and method != 'Nelder-Mead':
+        print(" WARNING: bounds not allowed for method {method}. Bounds will be ignored.")
+        _bounds = None
+
     fobj = fobj_preparation(parameters, order, proton_activity, yvalues, weights, calc_residuals)
     chisq0 = fobj(ini_vals)
-    print(f'initial chi squared: {chisq0}')
+    print(f' initial chi squared: {chisq0}\n')
 
     if dry_run:
         retv = None
     else:
-        retv = scipy.optimize.minimize(fobj, ini_vals, method=method)
+        retv = scipy.optimize.minimize(fobj, ini_vals, method=method, bounds=_bounds)
     infodict = {'xvalues': pH, 'yvalues': yvalues, 'result': retv,
                 'input_molecule': molecule,
                 'molecule': expmolec, 'order': order, 'parameters': parameters,
@@ -95,7 +111,7 @@ def fobj_preparation(parameters,
     return fobj
 
 
-def _apply_keywords(args, parameters):
+def _apply_keywords(args, parameters, ms_names):
     for kw in args:
         match kw:
             case 'fix':
@@ -108,9 +124,17 @@ def _apply_keywords(args, parameters):
                     parameters.create_restraint(restraint)
             case 'matrix':
                 pass
+            case 'bound':
+                _process_bound(args[kw], parameters, ms_names)
             case other:
                 raise ValueError(f"Invalid keyword: {other}")
 
+
+def _process_bound(bounds, parameters, ms_naming):
+    reverse_names = {v: k for k, v in ms_naming.items()}
+    for umsn, lower, upper in bounds:
+        ums = reverse_names[umsn]
+        parameters.create_bound(ums, lower, upper)
 
 def _calc_free_energy(parameters):
     microstates = gems.libuk.generate_all_microstates(parameters.size)

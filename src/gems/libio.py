@@ -236,6 +236,8 @@ def __load_header(streamio):
                 __push_param(keywords, 'fix', param)
             case ['$RESTRAIN', *param]:
                 __push_param(keywords, 'restrain', tuple(param))
+            case ['$BOUND', variable, lower_bound, upper_bound]:
+                __push_param(keywords, 'bound', (variable, float(lower_bound), float(upper_bound)))
             case other:
                 if line[0] == '$':
                     raise ValueError(f"Invalid keyword: {_}")

@@ -23,6 +23,7 @@ class FittingParams():
         self.size = len(tuple(mapping.keys())[0])
         self.mapping = mapping
         self.msnames = {val: kw for kw, val in msnames.items()}  # here the naming is reversed
+        self.bounds = None
 
         parm_keys = itertools.chain.from_iterable([tuple(gems.libuk.filter_by_macro(mapping, n)) for n in (1,2,3)])
         self.parameters = dict.fromkeys(set(parm_keys), 0.0)
@@ -32,10 +33,20 @@ class FittingParams():
 
     def __prepareids(self):
         # TODO probably IDs are not necessary
+        aux2 = (ums for ums in self.mapping.values() if 0 < gems.libuk.ums_level(ums) < 4)
         aux = {(sum(gems.libuk.pop_microstate(m)), min(sum(a*2**n for n, a in enumerate(b)) for b in m)): m
-               for m in set(self.mapping.values())}
+               for m in set(aux2)}
+        #       for m in set(self.mapping.values())}
         self.ids = {n:aux[k] for n, k in enumerate(sorted(aux))}
         self.revid = {aux[k]:n for n, k in enumerate(sorted(aux))}
+
+    def create_bound(self, ums, lower, upper):
+        if ums in self.constraints:
+            raise ValueError("parameter is constrained")
+        if self.bounds is None:
+            self.bounds = {ums: (lower, upper)}
+        else:
+            self.bounds[ums] = (lower, upper)
 
     def create_constraint(self, msid):
         #microstate = self.ids[msid]
@@ -60,6 +71,12 @@ class FittingParams():
         mult = (-1, 1/2, 1/6)
         return self.__common_free_energy(self.vmc, mult, microstate, max_level) 
 
+    def get_bounds(self):
+        if self.bounds is None:
+            return None
+        else:
+            return tuple(self.bounds.get(ums, (None, None)) for ums in self.get_sorted_params())
+
     def __common_free_energy(self, fvmc: callable, mult: tuple, microstate, max_level=3):
         energy = 0.0
         LN10 = 2.3025851
@@ -81,15 +98,19 @@ class FittingParams():
         c = self.mapping[microstate]
         i = self.revid[c]
         if c in self.constraints:
-            return "fixed"
+            retv = "fixed"
         elif i in self.restrained_ids:
             # for n, r in enumerate(self.restraints):
             #     if i in r:
             #         break
             n, _, _ = self.__locate_restraint(c[0])
-            return f"restrained[{n}]"
+            retv = f"restrained[{n}]"
         else:
-            return "refined"
+            retv = "refined"
+        if c in self.bounds:
+            lower, upper = self.bounds[c]
+            retv += f", bound[{lower}/{upper}]"
+        return retv
 
     def evmc(self, microstate):
         return self.__common_vmc(microstate, True)
