@@ -107,7 +107,7 @@ class FittingParams():
             retv = f"restrained[{n}]"
         else:
             retv = "refined"
-        if c in self.bounds:
+        if self.bounds is not None and c in self.bounds:
             lower, upper = self.bounds[c]
             retv += f", bound[{lower}/{upper}]"
         return retv

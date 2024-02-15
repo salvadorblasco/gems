@@ -60,8 +60,9 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
     print('Starting...')
 
     # method = 'L-BFGS-B'
-    method = 'BFGS'
+    # method = 'BFGS'
     # method='Nelder-Mead'
+    method = keywords.get('method', 'BFGS')
 
     print(f' optimize with {method}')
     # print(parameters.get_bounds())
@@ -123,6 +124,8 @@ def _apply_keywords(args, parameters, ms_names):
                 for restraint in restraints:
                     parameters.create_restraint(restraint)
             case 'matrix':
+                pass
+            case 'method':
                 pass
             case 'bound':
                 _process_bound(args[kw], parameters, ms_names)

@@ -238,9 +238,11 @@ def __load_header(streamio):
                 __push_param(keywords, 'restrain', tuple(param))
             case ['$BOUND', variable, lower_bound, upper_bound]:
                 __push_param(keywords, 'bound', (variable, float(lower_bound), float(upper_bound)))
+            case ['$METHOD', method]:
+                keywords['method'] = method
             case other:
                 if line[0] == '$':
-                    raise ValueError(f"Invalid keyword: {_}")
+                    raise ValueError(f"Invalid keyword: {other}")
                 break
     molecule = line
     aux = streamio.readline().strip()

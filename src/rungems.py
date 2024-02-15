@@ -71,11 +71,23 @@ def run():
     if parsed_args.fit:
         order = parsed_args.order
         if parsed_args.uvvis:
-            file_contents = gems.libio.load_file_spectra(parsed_args.fit)
+            floader = gems.libio.load_file_spectra
+        else:
+            floader = gems.libio.load_file
+
+        try:
+            file_contents = floader(parsed_args.fit)
+        except ValueError:
+            print("ERROR: input file contains errors")
+            print("program terminated")
+            sys.exit(1)
+
+        if parsed_args.uvvis:
+            # file_contents = gems.libio.load_file_spectra(parsed_args.fit)
             title, molecule, ini_vals, keywords, pH, wavelength, yvalues = file_contents
             labels = wavelength
         else:
-            file_contents = gems.libio.load_file(parsed_args.fit)
+            # file_contents = gems.libio.load_file(parsed_args.fit)
             title, molecule, ini_vals, keywords, labels, pH, yvalues = file_contents
 
         infodict = gems.fit.run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order,
