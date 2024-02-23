@@ -77,8 +77,9 @@ def run():
 
         try:
             file_contents = floader(parsed_args.fit)
-        except ValueError:
+        except ValueError as verr:
             print("ERROR: input file contains errors")
+            print(f"-> {verr}")
             print("program terminated")
             sys.exit(1)
 

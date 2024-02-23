@@ -25,6 +25,12 @@ You will need
 -   [scipy](http://www.scipy.org/)
 -   Optionally [matplotlib](http://www.matplotlib.org/)
 
+You can clone the current repository by typing
+
+`$ git clone https://github.com/salvadorblasco/gems`
+
+The go to the folder `src` and run the main script `./rungems.py`.
+
 First run
 ---------
 

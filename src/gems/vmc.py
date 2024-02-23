@@ -9,12 +9,13 @@
 
 import itertools
 import sys
+import typing
 
 import gems.libuk
 
 
 class FittingParams():
-    def __init__(self, mapping, msnames):
+    def __init__(self, mapping: dict, msnames: dict):
         self.constraints = {}
         self.restraints = []
         self.restrained_ids = []
@@ -40,7 +41,7 @@ class FittingParams():
         self.ids = {n:aux[k] for n, k in enumerate(sorted(aux))}
         self.revid = {aux[k]:n for n, k in enumerate(sorted(aux))}
 
-    def create_bound(self, ums, lower, upper):
+    def create_bound(self, ums: frozenset, lower: float, upper: float):
         if ums in self.constraints:
             raise ValueError("parameter is constrained")
         if self.bounds is None:
@@ -115,6 +116,10 @@ class FittingParams():
     def evmc(self, microstate):
         return self.__common_vmc(microstate, True)
 
+    def fitting_size(self) -> int:
+        "Return the number of parameters to fit."
+        return len(self.parameters)
+
     def vmc(self, microstate):
         return self.__common_vmc(microstate, False)
 
@@ -168,3 +173,10 @@ class FittingParams():
 
     def get_sorted_params(self):
         return (self.ids[k] for k in sorted(self.ids))
+
+    def get_sorted_values(self):
+        store = self.parameters
+        for _id in sorted(self.ids):
+            microstate = self.ids[_id]
+            if microstate in store:
+                yield store[microstate]

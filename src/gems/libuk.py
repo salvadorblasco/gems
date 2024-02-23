@@ -1,11 +1,13 @@
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 # ! This file is part of the GEMS software                                   !
 # !                                                                          !
-# ! Copyright (c) 2024 by Salvador Blasco <salvador.blasco@gmail.com>        !
+# ! Copyright (c) 2021-2024 by Salvador Blasco <salvador.blasco@gmail.com>   !
 # ! Licensed under MIT license (see file LICENSE)                            !
 # +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+
 
-"""This module contains the basic tools for microconstants. These functions
+"""Basic tools for microconstants.
+
+This module contains the basic tools for microconstants. These functions
 are loaded by :program:`GEMS` or they can be used in a standalone
 python script.
 
@@ -320,7 +322,7 @@ def macro_constants(free_enrg: dict):
     return tuple(retv)
 
 
-def microsteps(size, mapping):
+def microsteps(size: int, mapping: dict) -> dict:
     msteps = {}
 
     for n in range(size):
@@ -425,21 +427,21 @@ def micro_constant(microstep1, microstep2, free_energy):
     return -(f2-f1)/2.3025851
 
 
-def micro_constants(msteps, free_enrg):
+def micro_constants(msteps: dict, free_enrg: dict) -> dict:
     return {ms1: {ms2: micro_constant(ms1, ms2, free_enrg) for ms2 in steps}
             for ms1, steps in msteps.items()}
 
 
 # def micro_constants(molecule, free_enrg):
 #     r"""Calculate the micro constants from the energy data.
-# 
+#
 #     Parameters:
 #         molecule (str): The molecule symmetry
 #         free_enrg (dict): dict containing the :ref:`def_free_energy` for each microstate.
 #     Returns:
 #         dict: the values of the microconstants for each microstate and
 #             microstep.
-# 
+#
 #     """
 #     retv = {}
 #     for ms, energy in free_enrg.items():
@@ -450,7 +452,7 @@ def micro_constants(msteps, free_enrg):
 #             key = molecule[pos]
 #             if key in retv2:
 #                 continue        # not covered
-# 
+#
 #             newms = list(ms)
 #             newms[pos] = 1
 #             energy2 = free_enrg[tuple(newms)]
@@ -473,11 +475,10 @@ def macrostate_probability(macro_consts: np.ndarray, proton_activity: np.ndarray
     Parameters:
         macro_consts (:class:`numpy.ndarray`): An array containing the values
             if the macroconstants.
-        ah (:class:`numpy.ndarray`): The activity of protons.
+        proton_activity (:class:`numpy.ndarray`): The activity of protons.
 
     Returns:
         :class:`numpy.ndarray`: The probability of the macrostate.
-
     """
     n = np.arange(len(macro_consts))
     p = macro_consts[None, :]*proton_activity[:, None]**n[None, :]
@@ -486,8 +487,7 @@ def macrostate_probability(macro_consts: np.ndarray, proton_activity: np.ndarray
 
 
 def merge_equivalent_microstates(mapping: dict, property_: dict, function: typing.Callable) -> dict:
-    """Translate individual microstates keys to unique microstates.
-    """
+    """Translate individual microstates keys to unique microstates."""
     return {ums: functools.reduce(function, (property_[ms] for ms in ums))
             for ums in set(mapping.values())}
 
@@ -495,18 +495,17 @@ def merge_equivalent_microstates(mapping: dict, property_: dict, function: typin
 # DEPRECATED
 # def microstate_population(conditional_probability, molecule):
 #     """Calculate the population for each microstate.
-# 
+#
 #     The population for each microstate is basically computed in the
 #     :ref:`def_conditional_probability` variable. However, some microstates
 #     are equivalent. This routine sums all equivalent microstates together and
 #     returns a more sensible result.
-# 
+#
 #     Parameters:
 #         conditional_probability (dict): the :ref:`def_conditional_probability`.
 #         molecule (str): A string representing the :ref:`def_molecule_symmetry`.
 #     Returns:
 #         dict: the microstate population.
-# 
 #     """
 #     chain_ = itertools.chain.from_iterable
 #     names = set(chain_(name_terms(molecule, i) for i in range(len(molecule)+1)))
@@ -518,7 +517,7 @@ def merge_equivalent_microstates(mapping: dict, property_: dict, function: typin
 #     return pop
 
 
-def microstate_probability(free_energy: dict, ah: np.ndarray) -> dict:
+def microstate_probability(free_energy: dict, proton_activity: np.ndarray) -> dict:
     r"""Calculate microstate probability from the energy data.
 
     The probability of a given microstate is calculates from the free energy
@@ -533,13 +532,12 @@ def microstate_probability(free_energy: dict, ah: np.ndarray) -> dict:
     Parameters:
         free_energy (dict): A dict containing the free energy for each
             microstate.
-        ah (:class:`numpy.ndarray`): The activity of protons.
+        proton_activity (:class:`numpy.ndarray`): The activity of protons.
 
     Returns:
         :py:class:`dict`: The microstate probability for each microstate
-
     """
-    p = {s: ah**sum(s) * math.exp(-energ) for s, energ in free_energy.items()}
+    p = {s: proton_activity**sum(s) * math.exp(-energ) for s, energ in free_energy.items()}
     norm = sum(p.values())
     return {s: v/norm for s, v in p.items()}
 
@@ -559,7 +557,6 @@ def mlstsq(A, B):
     .. seealso:: :func:`scipy.linalg.lstsq`
     .. warning:: This function will be removed when NumPy finally supports
         masked matrix inversion.
-
     """
     mres = lstsq(A, B, rcond=None)[0]
     for c in (n for n, t in enumerate(np.any(B.mask, axis=0)) if t):
@@ -578,7 +575,6 @@ def num_prot_centres(data: dict) -> int:
             of zeros and nones indicating the microstate.
     Returns:
         int: the number of protonation centres.
-
     """
     return len(tuple(data.keys())[0])
 
@@ -591,154 +587,13 @@ def num_prot_centres2(data: dict) -> int:
             of tuples of of zeros and nones indicating the unique microstate.
     Returns:
         int: the number of protonation centres.
-
     """
     ms0 = pop_microstate(tuple(data.keys())[0])
     return len(ms0)
-    # return len(tuple(data.keys())[0][0])
 
 
 # DEPRECATED FUNCTIONS AND JUNK
 
-
-# DEPRECATED
-# def micro_constants2(molecule, lvl1, lvl2, lvl3, elvl1=None, elvl2=None,
-#                      elvl3=None):
-#     r"""Calculate the micro constants from parameters.
-# 
-#     .. math::
-#         {\rm p}\bar{K}_{A\{s_j\}} = {\rm p}\bar{K}_i
-#         -\sum_j{\varepsilon_{ij}s_j}
-#         -frac12 \sum_{jk}{\lambda_{ijk}s_js_k}
-# 
-#     Parameters:
-#         molecule (str): the molecule symmetry
-#         lvl1 (:class:`numpy.ndarray`): a 1D array with first order parameters.
-#         lvl2 (:class:`numpy.ndarray`): a 2D array with second order parameters.
-#         lvl3 (:class:`numpy.ndarray`): a 3D array with third order parameters.
-#         elvl1 (:class:`numpy.ndarray`, optional): a 1D array with first order
-#             parameter errors.
-#         elvl2 (:class:`numpy.ndarray`, optional): a 2D array with second order
-#             parameter errors.
-#         elvl3 (:class:`numpy.ndarray`, optional): a 3D array with third order
-#             parameter errors.
-# 
-#     """
-#     n_protcentr = len(lvl1)
-#     retv = {}
-#     for ms in itertools.product((0, 1), repeat=n_protcentr):
-#         retv2 = {}
-#         for pos, bit in enumerate(ms):
-#             if bit == 1:
-#                 continue
-#             key = molecule[pos]
-#             if key in retv2:
-#                 continue
-#             aux2 = sum(lvl2[pos, j]*ms[j] for j in range(n_protcentr))
-#             aux3 = sum(lvl3[pos, j, k]*ms[j]*ms[k] for j in range(n_protcentr)
-#                        for k in range(n_protcentr))
-#             mk = lvl1[pos] - aux2 - 0.5*aux3
-#             if elvl1 is None:
-#                 retv2[key] = mk
-#             else:
-#                 eaux2 = sum(elvl2[pos, j]**2*ms[j] for j in range(n_protcentr))
-#                 eaux3 = sum(elvl3[pos, j, k]**2*ms[j]*ms[k]
-#                             for j in range(n_protcentr)
-#                             for k in range(n_protcentr))
-#                 emk = (elvl1[pos] - eaux2 - 0.5*eaux3)**0.5
-#                 retv2[key] = (mk, emk)
-#         retv[ms] = retv2
-#     return retv
-
-
-# DEPRECATED
-# def microstate_multiplicity(molecule, microstate):
-#     """Calculate the multiplicity of a microstate.
-# 
-#     Parameters:
-#         molecule (str): The molecule symmetry
-#         microstate (str): The string representation of a microstate
-#     Returns:
-#         int: the multiplicity of the microstate
-#     Note:
-#         The molecule and microstate strings must be expanded.
-# 
-#     >>> microstate_multiplicity('AABC', 'BC')
-#     1
-#     >>> microstate_multiplicity('AABC', 'ABC')
-#     2
-# 
-#     """
-#     count1 = collections.Counter(molecule)
-#     count2 = collections.Counter(microstate)
-#     remainders = (1 + count1[k] - v for k, v in count2.items())
-#     return functools.reduce(lambda a, b: a*b, remainders, 1)
-
-
-
-# DEPRECATED
-# def fit_free_energy(microk, lvl1=None, lvl2=None, error=False):
-#     r"""Calculate the free energy of a system based on parameters.
-# 
-#     The **free energy** of the system is decomposed in first, second and third
-#     order parameters and calculated according to the following equation.
-# 
-#     .. math::
-#         \frac{\beta F(\{s_j\})}{\ln 10} = -\sum_j{p\hat{K}_js_j}
-#            + \frac1{2!}\sum_{ij}\varepsilon_{ij}s_is_j
-#            + \frac1{3!}\sum_{ijk}\lambda_{ijk}s_is_js_k
-# 
-#     """
-#     centres = len(microk)
-#     ln10 = 2.3025851
-# 
-#     def zero_term(ms):
-#         return sum(a*b for a, b in zip(ms, microk))
-# 
-#     def first_term(ms):
-#         return sum(lvl1[i, j]*ms[i]*ms[j]
-#                    for i, j in iprod(range(centres), range(centres)))
-# 
-#     def scnd_term(ms):
-#         return sum(lvl2[i, j, k]*ms[i]*ms[j]*ms[k]
-#                    for i, j, k in iprod(range(centres), range(centres),
-#                                         range(centres)))
-# 
-#     def gen():
-#         for microstate in iprod((0, 1), repeat=centres):
-#             sum1 = zero_term(microstate)
-#             if not error:
-#                 sum1 *= -1
-#             sum2 = first_term(microstate) if lvl1 is not None else 0.0
-#             sum3 = scnd_term(microstate) if lvl2 is not None else 0.0
-#             yield microstate, ln10*(sum1 + sum2/2.0 + sum3/6.0)
-# 
-#     return {d: k for d, k in gen()}
-
-
-# DEPRECATED
-# def remove_equivalent_states(molecule, data):
-#     """Remove microstates that are equivalent based on molecule symmetry.
-# 
-#     Parameters:
-#         molecule (str): a string representing the molecule symmetry
-#         data (dict): any data where the keys are the microsite numerical
-#             representation.
-#     Returns:
-#         dict: The same *data* but with the entries that are symmetrically
-#             equivalente removed.
-# 
-#     """
-#     guard = set()
-#     retv = {}
-#     for ms, v in data.items():
-#         name = name_microstate(molecule, ms)
-#         if name in guard:
-#             continue
-# 
-#         retv[ms] = v
-#         guard.add(name)
-#     return retv
 
 
 # def total_microstates(microstates):
@@ -749,7 +604,7 @@ def num_prot_centres2(data: dict) -> int:
 # DEPRECATED
 # def name_terms(molecule, level):
 #     """Name the terms of the molecule at a given level.
-# 
+#
 #     Parameters:
 #         molecule (str): A string representing the :ref:`def_molecule_symmetry`.
 #         level (int): the level (1, 2, or 3) of the parameters
@@ -762,7 +617,7 @@ def num_prot_centres2(data: dict) -> int:
 #         ['AA', 'AB', 'AC', 'BC']
 #         >>> name_terms('AABC', 3)
 #         ['AAB', 'AAC', 'ABC']
-# 
+#
 #     """
 #     cmb = itertools.combinations(molecule, level)
 #     return sorted(set(("".join(q) for q in cmb)))
@@ -771,18 +626,18 @@ def num_prot_centres2(data: dict) -> int:
 # DEPRECATED
 # def name_microstate(molecule: str, ms: tuple) -> str:
 #     """Given a numeric microstate, compute the text version of it.
-# 
+#
 #     Parameters:
 #         molecule (str): A string representing the :ref:`def_molecule_symmetry`.
 #         ms (tuple): a 0/1 tuple representing the :ref:`microstate <microstate_definition>`.
 #     Returns:
 #         str: the name of the microstate.
-# 
+#
 #     >>> name_microstate('AABC', (1, 0, 0, 1))
 #     'AC'
 #     >>> name_microstate('AAB', (1, 0, 0))
 #     'A'
-# 
+#
 #     """
 #     return "".join(t for t, n in zip(molecule, ms) if n)
 
@@ -790,19 +645,19 @@ def num_prot_centres2(data: dict) -> int:
 # DEPRECATED
 # def molecule_info(molecule):
 #     """Info given a molecule symmetry.
-# 
+#
 #     Parameters:
 #         molecule (str): A string representing the :ref:`def_molecule_symmetry`.
-# 
+#
 #     Returns:
 #         dict: info about the molecule symmetry
-# 
+#
 #         * *expanded* the molecule with multipliers expanded
 #         * *n_params_1* the number of first-order parameters
 #         * *n_params_2* the number of second-order parameters
 #         * *n_params_3* the number of third-order parameters
 #         * *n_protctrs* the number of protonation centres
-# 
+#
 #     """
 #     info = dict()
 #     expanded = expand_name(molecule)
@@ -817,16 +672,16 @@ def num_prot_centres2(data: dict) -> int:
 # DEPRECATED
 # def order_terms(molecule, n):
 #     """Return valid combinations of sites of order n.
-# 
+#
 #     Given a molecule, n-th order combinations of the sites defined by the
 #     symmetry. Results are sorted.
-# 
+#
 #     Parameters:
 #         molecule (str): a string defining the summetry of the molecule.
 #         n (int): the order of interactions, usually n=2 or n=3.
 #     Returns:
 #         list: valid n-th order combinations
-# 
+#
 #     """
 #     lst = ["".join(_) for _ in set(itertools.combinations(molecule, n))]
 #     lst.sort()

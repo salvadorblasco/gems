@@ -27,6 +27,7 @@ Auxiliary Functions:
 
 import collections
 import sys
+import typing
 
 import numpy as np
 import scipy.optimize
@@ -79,6 +80,7 @@ def run_fitting(title, pH, yvalues, molecule, keywords, ini_vals, order, flag_uv
         _bounds = None
 
     fobj = fobj_preparation(parameters, order, proton_activity, yvalues, weights, calc_residuals)
+    # fobj, ini_vals = fobj_preparation2(parameters, order, proton_activity, yvalues, weights, calc_residuals)
     chisq0 = fobj(ini_vals)
     print(f' initial chi squared: {chisq0}\n')
 
@@ -99,17 +101,51 @@ def fobj_preparation(parameters,
                      proton_activity: np.ndarray,
                      yvalues: np.ndarray,
                      weights: np.ndarray,
-                     fresiduals: callable):
-    """Generate the objective function.
-    """
+                     fresiduals: typing.Callable):
+    """Generate the objective function. """
     def fobj(values):
-        # print(values)
         parameters.set_values(values)
         free_enrg = _calc_free_energy(parameters)
         residual = fresiduals(free_enrg, yvalues, proton_activity)
         chisq = np.sum(weights*residual**2)
+        # print(values, chisq)
         return chisq
     return fobj
+
+
+def fobj_preparation2(parameters,
+                      order: int, 
+                      proton_activity: np.ndarray,
+                      yvalues: np.ndarray,
+                      weights: np.ndarray,
+                      fresiduals: typing.Callable):
+    """Generate the objective function. 
+
+    This function includes the fitting of the theta values as parameters.
+    """
+    size: int = parameters.fitting_size()
+    free_energy = _calc_free_energy(parameters)
+    micro_prob = gems.libuk.microstate_probability(free_energy, proton_activity)
+    initial_theta = gems.libuk.avg_prtdeg(micro_prob)
+    initial_delta = yvalues.T @ np.linalg.pinv(initial_theta)
+    delta_shape = initial_delta.shape
+    initial_values = np.concatenate((np.fromiter(parameters.get_sorted_values(), dtype=float),
+                                     0.00001*initial_delta.flatten()))
+
+    def fobj(values):
+        pvalues = values[:size]
+        delta = np.array(values[size:]).reshape(delta_shape)
+        parameters.set_values(pvalues)
+        free_energy = _calc_free_energy(parameters)
+        micro_prob = gems.libuk.microstate_probability(free_energy, proton_activity)
+        theta = gems.libuk.avg_prtdeg(micro_prob)
+        ycalc = theta.T @ delta.T
+        residual = yvalues - ycalc
+        chisq = np.sum(weights*residual**2)
+        print(chisq)
+        print(values[:size], np.max(delta) , chisq)
+        return chisq
+    return fobj, initial_values
 
 
 def _apply_keywords(args, parameters, ms_names):
@@ -343,29 +379,32 @@ def calc_residuals(free_energy, shifts, proton_activity):
         :class:`numpy.ndarray`: the residuals
 
     """
+    # breakpoint()
     calc_beta = np.array(gems.libuk.macro_constants(free_energy))
     macro_prob = gems.libuk.macrostate_probability(calc_beta, proton_activity)
     # !!
     # yvalues = shifts
     # size = len(calc_beta) - 1
-    # micro_prob = gems.libuk.microstate_probability(free_energy, proton_activity)
+    # # micro_prob = gems.libuk.microstate_probability(free_energy, proton_activity)
     # conditional_probability = gems.libuk.conditional_probability2(free_energy)
-    # theta = gems.libuk.avg_prtdeg(micro_prob)
-    # delta = yvalues.T @ np.linalg.pinv(theta)
+    # # # theta = gems.libuk.avg_prtdeg(micro_prob)
+    # # # delta = yvalues.T @ np.linalg.pinv(theta)
     # matrix_a = gems.libuk.matrix_a(conditional_probability, size)
-    # matrix_b = delta @ matrix_a
-    # ycalc = macro_prob @ matrix_b.T
-    # residual = ycalc - yvalues
+    # matrix_b = gems.libuk.matrix_b(macro_prob, yvalues)
+    # delta = matrix_b.T @ np.linalg.pinv(matrix_a)
+    # theta = macro_prob @ matrix_a.T
+    # # delta = matrix_a @ matrix_b
+    # calc_shifts = delta @ theta.T
     # !!
 
     ## bmatrix = fit_shifts(macro_prob, shifts)
     ## residual = np.dot(macro_prob, bmatrix) - shifts
     # calc_shifts = fit_shifts(macro_prob, shifts)
     matrix_b = gems.libuk.matrix_b(macro_prob, shifts)
+    # delta = matrix_a @ matrix_b
     # calc_shifts = macro_prob @ matrix_b
     calc_shifts = np.dot(macro_prob, matrix_b)
     residual = calc_shifts - shifts
-    # print(np.sum(residual**2))
     return residual
 
 
@@ -472,6 +511,10 @@ def calc_error_free_energy(molecule, variance, n_microcts):
     term1 = first_term(molecule, variance[:n_microcts])
     term2, term3 = build_terms(molecule, variance[n_microcts:])
     return gems.libuk.fit_free_energy(term1, term2, term3, error=True)
+
+
+def nmr_weighting(parameters, nmr_labels):
+    ...
 
 
 def spectra_weighting(data, weight_param=0.01):
